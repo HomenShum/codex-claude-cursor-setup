@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "project-tools": {
+      "type": "stdio",
+      "command": "python",
+      "args": [
+        "-m",
+        "project_mcp_server"
+      ],
+      "env": {
+        "EXAMPLE_API_KEY": "${EXAMPLE_API_KEY}"
+      }
+    }
+  }
+}

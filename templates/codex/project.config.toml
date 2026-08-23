@@ -1,0 +1,8 @@
+# Copy to .codex/config.toml only in a trusted repository.
+# This project server inherits the user's environment; never commit a value.
+[mcp_servers.project_tools]
+command = "python"
+args = ["-m", "project_mcp_server"]
+enabled = false
+startup_timeout_sec = 10
+tool_timeout_sec = 30

@@ -1,0 +1,100 @@
+{
+  "accessed": "2026-08-23",
+  "sources": [
+    {
+      "vendor": "OpenAI",
+      "topic": "Codex CLI installation",
+      "url": "https://learn.chatgpt.com/docs/codex/cli"
+    },
+    {
+      "vendor": "OpenAI",
+      "topic": "Codex configuration",
+      "url": "https://learn.chatgpt.com/docs/config-file/config-basic"
+    },
+    {
+      "vendor": "OpenAI",
+      "topic": "AGENTS.md discovery",
+      "url": "https://learn.chatgpt.com/docs/agent-configuration/agents-md"
+    },
+    {
+      "vendor": "OpenAI",
+      "topic": "Model Context Protocol",
+      "url": "https://learn.chatgpt.com/docs/extend/mcp?surface=cli"
+    },
+    {
+      "vendor": "OpenAI",
+      "topic": "Skills",
+      "url": "https://learn.chatgpt.com/docs/build-skills"
+    },
+    {
+      "vendor": "OpenAI",
+      "topic": "Windows app",
+      "url": "https://learn.chatgpt.com/docs/windows/windows-app"
+    },
+    {
+      "vendor": "OpenAI",
+      "topic": "Windows sandbox",
+      "url": "https://learn.chatgpt.com/docs/windows/windows-sandbox"
+    },
+    {
+      "vendor": "OpenAI",
+      "topic": "WSL",
+      "url": "https://learn.chatgpt.com/docs/windows/wsl"
+    },
+    {
+      "vendor": "OpenAI",
+      "topic": "Linux app",
+      "url": "https://learn.chatgpt.com/docs/linux/linux-app"
+    },
+    {
+      "vendor": "OpenAI",
+      "topic": "ChatGPT desktop app",
+      "url": "https://learn.chatgpt.com/docs/app"
+    },
+    {
+      "vendor": "OpenAI",
+      "topic": "Importing other agent history",
+      "url": "https://learn.chatgpt.com/docs/import"
+    },
+    {
+      "vendor": "Anthropic",
+      "topic": "Claude Code installation",
+      "url": "https://code.claude.com/docs/en/setup"
+    },
+    {
+      "vendor": "Anthropic",
+      "topic": "Claude Code settings",
+      "url": "https://code.claude.com/docs/en/settings"
+    },
+    {
+      "vendor": "Anthropic",
+      "topic": "Claude Code memory and AGENTS.md import",
+      "url": "https://code.claude.com/docs/en/memory"
+    },
+    {
+      "vendor": "Anthropic",
+      "topic": "Model Context Protocol",
+      "url": "https://code.claude.com/docs/en/mcp"
+    },
+    {
+      "vendor": "Anthropic",
+      "topic": "Hooks guide",
+      "url": "https://code.claude.com/docs/en/hooks-guide"
+    },
+    {
+      "vendor": "Anthropic",
+      "topic": "Hooks reference",
+      "url": "https://code.claude.com/docs/en/hooks"
+    },
+    {
+      "vendor": "Anthropic",
+      "topic": "Skills",
+      "url": "https://code.claude.com/docs/en/skills"
+    },
+    {
+      "vendor": "Anthropic",
+      "topic": "Plugins",
+      "url": "https://code.claude.com/docs/en/plugins"
+    }
+  ]
+}
