@@ -2,7 +2,7 @@
 
 ## 2026-08-23 — Add copy-safe configuration examples
 
-- Commit: `candidate`
+- Commit: `79508f0`
 - User outcome: a team can start from parsed, permission-gated examples and
   supply credentials by environment-variable name. Codex MCP examples are
   disabled; Claude project MCP remains subject to each user's approval.

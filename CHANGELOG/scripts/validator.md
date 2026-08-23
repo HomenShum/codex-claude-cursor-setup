@@ -2,7 +2,7 @@
 
 ## 2026-08-23 — Add bounded publication checks
 
-- Commit: `candidate`
+- Commit: `79508f0`
 - User outcome: a maintainer can detect secrets, private paths, broken local
   links, invalid templates, missing attribution—including non-URL GitHub
   Actions references—and stale external sources.
