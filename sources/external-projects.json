@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "accessed": "2026-09-08",
+  "accessed": "2026-09-04",
   "scope": "Bounded direct-source corpus reconstructed through 2026-09-04 from the supplied setup inventory, sanitized direct dependency and container declarations, local extension records, current kit configuration, and primary public repositories. Historical application code and prose, private repositories, and transitive packages are excluded.",
   "methodology": {
     "current_kit_direct": [
@@ -15,10 +15,7 @@
       "https://github.com/agentskills/agentskills",
       "https://github.com/SchemaStore/schemastore",
       "https://github.com/openai/codex-plugin-cc",
-      "https://github.com/Sahir619/fable-method",
-      "https://github.com/newren/git-filter-repo",
-      "https://github.com/cli/cli",
-      "https://github.com/HomenShum/coding-agent-setup"
+      "https://github.com/Sahir619/fable-method"
     ],
     "required_historical_sources": [
       "https://github.com/Vistyy/nopus",
@@ -66,26 +63,6 @@
       "confidence": "high"
     },
     {
-      "name": "git-filter-repo",
-      "repository": "https://github.com/newren/git-filter-repo",
-      "category": "platform-tool",
-      "relationship": "One-time maintainer tool used for the owner-authorized two-commit history sanitization; not a setup runtime dependency.",
-      "license": "MIT for the tool, with alternative licensing and GPL-2.0 test-harness exceptions described in COPYING",
-      "accessed": "2026-09-08",
-      "evidence": "Installed callback interface, upstream manual and COPYING, and reviewed two-commit rewrite",
-      "confidence": "high"
-    },
-    {
-      "name": "GitHub CLI",
-      "repository": "https://github.com/cli/cli",
-      "category": "platform-tool",
-      "relationship": "Maintainer CLI used for repository identity, rename, publication metadata, and CI readback; not required for offline setup.",
-      "license": "MIT",
-      "accessed": "2026-09-08",
-      "evidence": "Installed gh command help, canonical publication checklist, and upstream LICENSE",
-      "confidence": "high"
-    },
-    {
       "name": "Anthropic Claude Code",
       "repository": "https://github.com/anthropics/claude-code",
       "category": "agent-workflow",
@@ -114,17 +91,6 @@
       "accessed": "2026-09-04",
       "evidence": "Public specification, examples, and repository license files",
       "confidence": "high"
-    },
-    {
-      "name": "Intermediate coding-agent setup kit",
-      "repository": "https://github.com/HomenShum/coding-agent-setup",
-      "category": "agent-workflow",
-      "relationship": "Same-owner intermediate publication whose three-host kit history is integrated into the original canonical repository.",
-      "license": "MIT",
-      "accessed": "2026-09-08",
-      "evidence": "Public main tree, full commit graph and unchanged LICENSE",
-      "confidence": "high",
-      "revision": "1f509066d43cae797ce8e7778f12ec01e0d22387"
     },
     {
       "name": "OpenAI Plugins",
@@ -264,16 +230,6 @@
       "license": "MIT",
       "accessed": "2026-08-23",
       "evidence": "Historical nodekit contract and promotion goal",
-      "confidence": "high"
-    },
-    {
-      "name": "Langfuse",
-      "repository": "https://github.com/langfuse/langfuse",
-      "category": "agent-workflow",
-      "relationship": "Recommended self-hosted tracing and evaluation backend subject to deployment-profile review; not bundled.",
-      "license": "MIT except enterprise directories",
-      "accessed": "2026-09-05",
-      "evidence": "Primary repository license and self-hosting documentation",
       "confidence": "high"
     },
     {
@@ -927,16 +883,6 @@
       "license": "Apache-2.0",
       "accessed": "2026-08-23",
       "evidence": "Historical frontend manifest and lockfile",
-      "confidence": "high"
-    },
-    {
-      "name": "React Flow / xyflow",
-      "repository": "https://github.com/xyflow/xyflow",
-      "category": "frontend",
-      "relationship": "Recommended interactive graph UI for the fresh application proof; not a kit runtime dependency.",
-      "license": "MIT",
-      "accessed": "2026-09-05",
-      "evidence": "Primary repository and React Flow integration documentation",
       "confidence": "high"
     },
     {

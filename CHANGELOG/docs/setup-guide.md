@@ -1,24 +1,5 @@
 # Setup guide changelog
 
-## 2026-09-08 — Restore the original repository as canonical
-
-- Commit: candidate; locate this entry's introducing commit in Git history.
-- User outcome: original subscribers receive the complete three-host kit under
-  the explicit `codex-claude-cursor-setup` name, with a concrete update map and
-  safe instructions for moving away from rewritten ancestry.
-- Source: owner-approved correction, original repository ID, GitHub rename and
-  history-removal documentation.
-- Files: `docs/repository-migration.md`, `AGENTS.md`, `SECURITY.md`, `HANDOFF.md`,
-  `docs/provenance.md`, source ledgers, and obsolete root Claude imports.
-- Verification: full current-tree/scenario/history gates and post-push public
-  identity/content readback are required; current CI is the reproducible receipt.
-- Caveats: old changeset hashes change; cached objects and existing clones are
-  not erased. Host login and live MCP/provider sessions are not certified by CI.
-- Historical correction: the August file list below again names `CLAUDE.md`,
-  its actual location at that time, rather than the later host-scoped location.
-- Touches: `CHANGELOG/docs/2026-09-08-cursor-scope.md`,
-  `CHANGELOG/scripts/validator.md`.
-
 ## 2026-09-04 — Support one contract across three native hosts
 
 - Commit: uncommitted local change; publication is blocked by the current
@@ -66,12 +47,6 @@
   them into an active project. Current-tree validation does not certify or
   rewrite an existing remote history.
 
-## 2026-09-05 — Point readers to the new public repository
-
-- User outcome: clone-path examples, the private vulnerability-report link, and the maintainer handoff identify the new three-host setup repository.
-- Verification: local link and attribution validation must pass; public content and private vulnerability-reporting availability are checked after repository creation.
-- macOS repair: explain how to supply a physical project path when system aliases trigger the deliberately strict local-input checks.
-
 ## 2026-08-23 — Publish one cross-client setup path
 
 - Commit: `79508f0`
@@ -79,18 +54,9 @@
   shared project contract without copying private machine state.
 - Source: current OpenAI and Anthropic installation, settings, instruction,
   MCP, skills, plugins, and hooks documentation.
-- Files: `README.md`, `docs/`, `AGENTS.md`, `CLAUDE.md`, and source ledgers.
+- Files: `README.md`, `docs/`, `AGENTS.md`, `.claude/CLAUDE.md`, and source ledgers.
 - Verification: offline validator, 11-scenario suite, and 129 bounded external
   links passed. After the initial push, GitHub reported `PUBLIC` with `main` as
   default; anonymous raw fetches returned HTTP 200 for the README title signal
   and a 111-project machine ledger at remote commit `79508f0`.
 - Caveats: vendor documentation is mutable; access dates are recorded.
-
-## 2026-09-07 — Review missing files before project adoption
-
-- Replace duplicate fresh-only shell copy maps with one documented read-only
-  plan and explicit missing-file apply for fresh and existing Git projects.
-- Explain complete canonical skill matching, manual conflicts, durable partial
-  receipts and inactive hooks/MCP. Keep target `NO_GATE` distinct from copying.
-- Verification: documented CLI consumers retain the structural doctor and
-  genuine missing-adapter and unconfigured-project scenarios.

@@ -11,8 +11,6 @@ from unittest import mock
 
 
 ROOT = Path(__file__).resolve().parents[1]
-# Physical fixture paths keep OS aliases outside link-rejection scenarios.
-TEMP_ROOT = Path(tempfile.gettempdir()).resolve(strict=True)
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import validate_repo  # noqa: E402
@@ -20,7 +18,7 @@ import validate_repo  # noqa: E402
 
 class SetupPublicationScenarios(unittest.TestCase):
     def copy_repository(self) -> tuple[tempfile.TemporaryDirectory[str], Path]:
-        temporary = tempfile.TemporaryDirectory(dir=TEMP_ROOT)
+        temporary = tempfile.TemporaryDirectory()
         target = Path(temporary.name) / "repo"
         shutil.copytree(ROOT, target, ignore=shutil.ignore_patterns(".git", "__pycache__"))
         return temporary, target
@@ -89,34 +87,6 @@ class SetupPublicationScenarios(unittest.TestCase):
             stream.write("\nhttps://" + "github.com/example/unattributed-tool\n")
         errors = validate_repo.validate_repo(target)
         self.assertTrue(any("uncatalogued GitHub repository" in error for error in errors))
-
-    def test_subscriber_can_follow_canonical_links_without_exempting_other_sources(self) -> None:
-        """A subscriber can follow renamed kit paths; a copied third-party link still needs attribution."""
-        temporary, target = self.copy_repository()
-        self.addCleanup(temporary.cleanup)
-        guide = target / "subscriber-test.md"
-        guide.write_text(
-            "https://github.com/HomenShum/codex-claude-cursor-setup/tree/main/templates/cursor\n",
-            encoding="utf-8",
-        )
-        self.assertEqual([], validate_repo.validate_repo(target))
-        with guide.open("a", encoding="utf-8") as stream:
-            stream.write("https://" + "github.com/example/not-the-canonical-kit\n")
-        self.assertTrue(any(
-            "uncatalogued GitHub repository" in error
-            for error in validate_repo.validate_repo(target)
-        ))
-
-    def test_migration_maintainer_can_cite_primary_docs_but_not_spoofed_hosts(self) -> None:
-        """A maintainer can verify rename/lease advice without broadening network authority."""
-        for url in (
-            "https://docs.github.com/en/repositories/creating-and-managing-repositories/renaming-a-repository",
-            "https://git-scm.com/docs/git-push",
-        ):
-            self.assertEqual(url, validate_repo.normalize_doc_url(url))
-        for host in ("docs.github.com.invalid", "git-scm.com.invalid", "127.0.0.1"):
-            with self.subTest(host=host), self.assertRaises(ValueError):
-                validate_repo.normalize_doc_url(f"https://{host}/migration")
 
     def test_release_engineer_is_stopped_by_an_unattributed_action(self) -> None:
         """A release engineer needs every executable CI dependency in the ledger."""

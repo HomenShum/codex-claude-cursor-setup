@@ -1,18 +1,5 @@
 # Validator changelog
 
-## 2026-09-08 — Bind publication references to the canonical kit
-
-- Commit: candidate; locate this entry's introducing commit in Git history.
-- User outcome: the original repository's new name is recognized as this kit,
-  while the intermediate source and migration utility retain explicit attribution.
-- Source: owner-approved destination correction and current Git/GitHub primary docs.
-- Files: `scripts/validate_repo.py`, `tests/test_setup_scenarios.py`, and source ledgers.
-- Verification: canonical-link, uncatalogued-source, and vendor-host scenarios,
-  full offline validation, external URL checks, and reachable-history scan.
-- Caveats: source validation is not a remote-identity check; maintainers must
-  perform the separate ID check before each publication.
-- Touches: `CHANGELOG/docs/setup-guide.md`, `CHANGELOG/docs/2026-09-08-cursor-scope.md`.
-
 - 2026-09-04: bind current-kit Git/Python prerequisites and every human ledger
   relationship, license, and access date to the machine-readable source catalog.
 - 2026-09-04: reject concrete Windows drive-root paths written with either
@@ -65,13 +52,6 @@
   the timeout it received.
 - Caveats: content scans reduce risk but do not replace review of the staged
   diff.
-
-## 2026-09-05 — Prepare fresh-history publication
-
-- User outcome: the public setup kit starts with reviewed files and no inherited Git objects.
-- Changes: align the self-repository attribution exemption with the publication destination; allow fifteen bounded minutes for the multi-platform offline CI job after the measured local scenario suite exceeded five minutes on its own.
-- Verification: offline validation, scenario tests, preflight, and a fresh-history scan must pass before upload; public raw content and a full remote clone are checked afterward.
-- Platform fixture repair: create all scenario temporary directories under their physical parent. The first public macOS run exposed `/var` aliases, and Windows exposed shortened directory names; both made otherwise-valid fixtures fail strict root-containment checks. Production guards and every malicious-link assertion remain unchanged; the actual macOS and Windows jobs are the required regression proof.
 
 ## 2026-08-23 — Add bounded publication checks
 

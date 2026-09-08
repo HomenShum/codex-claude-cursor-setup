@@ -37,13 +37,9 @@ links or junctions and never treats a partial inventory as a pass.
 
 The separate reachable-history gate does not rewrite history. It scans every
 ref-reachable object and path in a full clone against the digest-only marker
-policy. A clean-history claim requires the history gate, inspection of the
-resulting commit graph, and anonymous remote content proof. Already-clean
-history can be retained; contaminated history requires a separately authorized
-rewrite or reviewed fresh publication. The gate proves advertised reachable
-history, not erasure of previous clones, cached pages, or unreachable objects
-retained by a hosting provider. See the [repository migration](repository-migration.md)
-for this release's authorized two-commit sanitization and retained attribution.
+policy. A public zero-marker claim therefore requires a reviewed fresh history
+or a separately authorized history rewrite, followed by the history gate,
+inspection of the resulting commit graph, and anonymous remote content proof.
 The gate strips inherited Git environment routing, disables replacement
 objects, and rejects an effective legacy graft file so a process-local history
 overlay cannot manufacture the clean graph being inspected.

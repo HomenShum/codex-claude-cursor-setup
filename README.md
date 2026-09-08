@@ -5,20 +5,7 @@ Cursor in the same repository. One `AGENTS.md` owns the shared project
 contract; small host-native adapters provide MCP, hooks, subagents, and skill
 discovery without pretending the hosts use one configuration format.
 
-The canonical repository is `HomenShum/codex-claude-cursor-setup`, continued
-from `HomenShum/codex-claude-code-setup`. See the
-[repository migration guide](docs/repository-migration.md) for existing clones
-and the relationship to the separate `coding-agent-setup` repository.
-
 ## What is included
-
-For application implementation beyond workstation setup, start with the
-[one-prompt application bootstrap](docs/one-prompt-bootstrap.md): context reuse,
-data curation, tracing, calibrated evaluation, UI proof and harness qualification.
-
-The [outcome lifecycle](docs/outcome-lifecycle.md) carries frozen versions and
-failures across hosts; [enterprise profiles](docs/enterprise-deployment.md)
-separate data, inference, telemetry and operator-access requirements.
 
 - current install paths for Windows, macOS, Linux, and WSL;
 - one canonical project contract and one canonical `.agents/skills` tree;
@@ -165,13 +152,11 @@ real `@../AGENTS.md` import. Do not add a root `CLAUDE.md`: Cursor already
 loads `AGENTS.md`, so a root compatibility file would load the contract twice.
 Put Claude-only rules under `.claude/rules/`.
 
-For a fresh or existing Git repository, use the
-[reviewable setup plan](docs/setup.md#4-bootstrap-a-repository) before continuing.
-It reports missing, identical, conflicting and blocked destinations without
-writing. Apply only reviewed missing files; existing instructions and configs
-remain manual merge work. Fresh setup uses the same map for helpers, native
-adapters, disabled MCP examples and unconfigured harness. Copying them does
-not activate a host or prove your application ready.
+For a fresh empty repository, run the complete
+[Windows or POSIX materialization sequence](docs/setup.md#4-bootstrap-a-repository)
+before continuing. It copies the operational scripts, harness, native agent
+adapters, empty/disabled MCP starting points, and ignore rules assumed by
+steps 3–5 below.
 
 ```text
 your-project/
@@ -207,32 +192,18 @@ path. For Cursor's `agent` CLI, merge the reviewed
 `templates/cursor/cli-config.json.example` keys into the personal
 `~/.cursor/cli-config.json`; copy `templates/cursor/cli.json.example` to the
 target `.cursor/cli.json` only when the project needs an explicit CLI permission
-policy. Both Cursor examples start with an empty allowlist. Use `/sandbox` in
-the CLI to inspect sandbox and network settings, or start with
-`agent --sandbox enabled`; the flag accepts `enabled` or `disabled`, and these
-settings persist across sessions. See
-[Cursor CLI sandbox controls](https://cursor.com/docs/cli/overview#sandbox-controls).
-Generated `.claude/worktrees/` checkouts are ignored as well.
+policy. Both Cursor examples start with an empty allowlist. Generated
+`.claude/worktrees/` checkouts are ignored as well.
 
 Cursor's desktop/local Agent uses different files from the optional CLI. Review
 `templates/cursor/permissions.json.example` before copying it to
 `.cursor/permissions.json`, and review `templates/cursor/sandbox.json.example`
 before copying it to `.cursor/sandbox.json`. Permission lists combine across
-user and project scope when Run Mode is not admin-controlled; a file-defined
-allowlist replaces the corresponding IDE list. Team-managed Run Mode controls
-prevent local allowlist additions, and a team Auto-review configuration causes
-both local permissions files to be ignored. Allowlists and Auto-review guidance
-are not a security boundary. Sandboxing separately applies OS filesystem and
-network restrictions to supported commands. Project sandbox settings have
-higher priority, but paths are unioned and restrictive values win; team and
-built-in limits remain stronger. Review the effective mode as described in
-[setup scope](docs/setup.md#3-separate-shared-and-host-native-scope).
-
-These Cursor policy details were checked on 2026-09-08 against the
-[permissions reference](https://cursor.com/docs/reference/permissions),
-[Run Modes](https://cursor.com/docs/agent/security/run-modes), and
-[sandbox reference](https://cursor.com/docs/reference/sandbox). This is a
-documentation check, not a host-runtime verification.
+user and project scope. Project sandbox settings have higher priority, but
+extra paths are unioned and restrictive network or boolean values win; team and
+built-in limits remain stronger. The permission file applies only when a Run
+Mode is enabled. These controls reduce accidental authority but are not a
+security boundary.
 
 ### 3. Synchronize project skills
 
@@ -260,7 +231,7 @@ Copy reviewed examples to their host-owned locations:
 | Subagents | `.codex/agents/*.toml` | `.claude/agents/*.md` | `.cursor/agents/*.md` |
 | Hooks | `.codex/hooks.json` | `hooks` in `.claude/settings.json` | `.cursor/hooks.json` |
 | Permission policy | policy keys in `.codex/config.toml` | shared `permissions` in `.claude/settings.json` | `.cursor/permissions.json` (desktop/local Agent); `.cursor/cli.json` (Agent CLI) |
-| Sandbox | host policy in `.codex/config.toml` | Claude permission and sandbox controls | `.cursor/sandbox.json` (desktop/local Agent); `/sandbox` or `--sandbox` (Agent CLI) |
+| Sandbox | host policy in `.codex/config.toml` | Claude permission and sandbox controls | `.cursor/sandbox.json` (desktop/local Agent) |
 
 The materialized Claude Code and Cursor MCP files are empty; Codex's example
 server is disabled. Hook files remain examples outside active paths. Add one

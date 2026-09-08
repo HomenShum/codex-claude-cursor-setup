@@ -47,8 +47,6 @@ MAX_PRIVATE_MARKER_WINDOWS = 2_000_000
 ALLOWED_EXTERNAL_HOSTS = frozenset(
     {
         "github.com",
-        "docs.github.com",
-        "git-scm.com",
         "learn.chatgpt.com",
         "chatgpt.com",
         "releases.openai.com",
@@ -65,8 +63,6 @@ OFFICIAL_VENDOR_HOSTS = {
     "Anthropic": frozenset({"code.claude.com", "claude.ai", "downloads.claude.ai"}),
     "Cursor": frozenset({"cursor.com", "forum.cursor.com"}),
     "Graphite": frozenset({"graphite.com"}),
-    "GitHub": frozenset({"docs.github.com"}),
-    "Git": frozenset({"git-scm.com"}),
 }
 REQUIRED_PATHS = (
     ".gitignore",
@@ -193,7 +189,7 @@ GITHUB_URL = re.compile(
 )
 VENDOR_DOC_URL = re.compile(
     r"https://(?:learn\.chatgpt\.com|chatgpt\.com|releases\.openai\.com|"
-    r"code\.claude\.com|claude\.ai|downloads\.claude\.ai|cursor\.com|forum\.cursor\.com|graphite\.com|docs\.github\.com|git-scm\.com)/"
+    r"code\.claude\.com|claude\.ai|downloads\.claude\.ai|cursor\.com|forum\.cursor\.com|graphite\.com)/"
     r"[^\s)>\]\"'`]+",
     re.I,
 )
@@ -232,7 +228,7 @@ EXPECTED_HOST_CAPABILITIES = {
         "parallel_workers": True,
     },
 }
-EXPECTED_SKILL_COUNT = 18
+EXPECTED_SKILL_COUNT = 16
 EXPECTED_MINIMUM_PYTHON = "3.11"
 EXTERNAL_CATEGORIES = frozenset(
     {
@@ -1656,7 +1652,7 @@ def validate_repo(root: Path = ROOT) -> list[str]:
     for content in texts.values():
         for path_part in GITHUB_URL.findall(content):
             normalized = normalize_repo_url(f"https://github.com/{path_part}")
-            if normalized.lower() != "https://github.com/homenshum/codex-claude-cursor-setup":
+            if normalized.lower() != "https://github.com/homenshum/codex-claude-code-setup":
                 cited_repos.add(normalized)
         for action in ACTION_USE.findall(content):
             cited_repos.add(normalize_repo_url(f"https://github.com/{action}"))

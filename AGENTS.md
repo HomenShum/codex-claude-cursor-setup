@@ -13,9 +13,6 @@ machine-specific configuration.
 - `docs/mcp-and-agent-bridges.md` owns MCP and cross-agent setup.
 - `docs/skills-plugins-hooks.md` owns reusable workflow extensions.
 - `docs/capability-matrix.md` owns the current three-host path mapping.
-- `docs/repository-migration.md` owns canonical repository identity, subscriber
-  migration, and publication verification. Before pushing, verify GitHub ID
-  `1344270714`, not merely the configured remote name or branch equality.
 - `docs/preflight-and-continuity.md` owns deterministic gate and hook-state
   behavior.
 - `sources/external-projects.json` is the machine-readable third-party ledger.

@@ -340,21 +340,6 @@
       "vendor": "Graphite",
       "topic": "Optional Graphite CLI branch-stack observation and gt log short command",
       "url": "https://graphite.com/docs/command-reference"
-    },
-    {
-      "vendor": "GitHub",
-      "topic": "Repository rename identity and redirect caveats; accessed 2026-09-08",
-      "url": "https://docs.github.com/en/repositories/creating-and-managing-repositories/renaming-a-repository"
-    },
-    {
-      "vendor": "GitHub",
-      "topic": "Authorized history sanitization, clones and cached objects; accessed 2026-09-08",
-      "url": "https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository"
-    },
-    {
-      "vendor": "Git",
-      "topic": "Explicit expected-ref force-with-lease semantics; accessed 2026-09-08",
-      "url": "https://git-scm.com/docs/git-push"
     }
   ]
 }

@@ -5,10 +5,6 @@ are not interchangeable. Unless a row says otherwise, these paths describe
 local desktop, IDE, and CLI sessions. This matrix was rechecked against the
 vendors' primary documentation on 2026-09-04.
 
-Cursor permission precedence, sandbox controls, and local/remote skill scope
-were rechecked on 2026-09-08. That source check does not retest other host paths
-or prove native runtime behavior.
-
 | Capability | Codex | Claude Code | Cursor |
 |---|---|---|---|
 | Project instructions | Root and nested `AGENTS.md` | Import-only `.claude/CLAUDE.md` plus Claude-only `.claude/rules/` | Root and nested `AGENTS.md` |
@@ -17,7 +13,7 @@ or prove native runtime behavior.
 | Project MCP | `.codex/config.toml` | `.mcp.json` | `.cursor/mcp.json` |
 | Project hooks | `.codex/hooks.json` in a trusted project | `hooks` in `.claude/settings.json` | `.cursor/hooks.json` |
 | Permission policy | policy keys in `.codex/config.toml` | shared `permissions` in `.claude/settings.json` | `.cursor/permissions.json` (desktop/local Agent); `.cursor/cli.json` (Agent CLI) |
-| Sandbox policy | Codex sandbox settings | Claude permission and sandbox controls | `.cursor/sandbox.json` (desktop/local Agent); `/sandbox` or `--sandbox` (Agent CLI) |
+| Sandbox policy | Codex sandbox settings | Claude permission and sandbox controls | `.cursor/sandbox.json` (desktop/local Agent); CLI policy remains separate |
 | Parallel workers | Supported; bounded by Codex agent settings | Supported through subagents | Supported through foreground/background tasks |
 
 For reusable agents, omit Codex's TOML `model` key so the parent setting is
@@ -46,30 +42,13 @@ Code uses `.claude/skills`; run `scripts/sync_skills.py` to copy and verify a
 project mirror. Tracked whole-directory symlinks are intentionally avoided so
 the same kit works on native Windows and restricted filesystems.
 
-Cursor does not copy local `~/.agents/skills` or unsynced personal skills to
-Cloud Agents, Agents Window remote SSH sessions, or self-hosted workers.
-Personal Cloud sync uses `~/.cursor/skills`; self-hosted workers can use project
-skills from the repository. See [Cursor skill scope](https://cursor.com/docs/skills#skill-directories).
-
 Cursor's desktop/local Agent permission lists combine across user and project
-scope when Run Mode is not admin-controlled; file-defined allowlists replace
-the corresponding IDE lists. Team-managed Run Mode controls prevent local
-allowlist additions, and a team Auto-review configuration causes both local
-permissions files to be ignored. The permission file applies only with a Run
-Mode enabled; `autoRun` guidance applies only in Auto-review. Allowlists and
-Auto-review guidance are not a security boundary. See the
-[permissions reference](https://cursor.com/docs/reference/permissions) and
-[Run Modes](https://cursor.com/docs/agent/security/run-modes).
-
-Sandboxing separately applies OS filesystem and network restrictions to
-supported commands. Project sandbox values have higher priority, but extra
-paths are unioned and restrictive values win; team and built-in restrictions
-remain stronger. The effective network mode can add default domains or allow
-all network access; inspect it alongside the file. The Agent CLI uses separate
-controls: `/sandbox` or `agent --sandbox enabled`; the flag accepts `enabled`
-or `disabled`, and settings persist across sessions. See
-[sandbox configuration](https://cursor.com/docs/reference/sandbox) and
-[CLI sandbox controls](https://cursor.com/docs/cli/overview#sandbox-controls).
+scope and apply only when a Run Mode is enabled. Project sandbox values have
+higher priority, but extra paths are unioned and restrictive network or boolean
+values win; team and built-in restrictions remain stronger. The optional Agent
+CLI uses its own configuration. These policy files steer tool use but are not a
+security boundary, so hostile code still needs OS-level isolation and secrets
+outside the workspace.
 
 Primary references: [Codex subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents),
 [Codex hooks](https://learn.chatgpt.com/docs/hooks),

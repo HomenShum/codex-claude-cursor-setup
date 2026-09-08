@@ -1,6 +1,6 @@
 # External projects
 
-<!-- external-projects-json-sha256: 34df304d1bf81b35f11aca43e07ef64a15824bb6dfbeb26465388dabf59b3c78 -->
+<!-- external-projects-json-sha256: 667f02db398143b6d9059ccffcd639ad9774512f535cb897162fce4fbd809238 -->
 
 This is the human-readable view of the machine ledger in [`sources/external-projects.json`](../sources/external-projects.json). It is a bounded corpus reconstructed through 2026-09-04 from the supplied setup inventory, current kit files, sanitized direct dependency and container declarations, local extension records, and historical research notes. It deliberately excludes transitive packages, private repository identities, and historical application code or prose.
 
@@ -33,15 +33,12 @@ Three caveats deserve special attention:
 
 ## Platform prerequisites
 
-These repositories back runtime commands or explicitly identified one-time
-maintainer operations. Migration tooling is not required by setup consumers.
+These repositories back commands that this setup kit executes directly.
 
 | Project | Relationship | License | Accessed | Evidence and caveats |
 |---|---|---|---|---|
 | [Git](https://github.com/git/git) | Direct runtime prerequisite for bootstrap, generated-worktree identity checks, and branch-stack ancestry proof in this kit. | GPL-2.0-only for the main project; compatible licenses apply to identified parts | 2026-09-04 | Evidence: Current setup instructions, hook implementation, branch-stack checker, and upstream repository notice |
 | [CPython](https://github.com/python/cpython) | Direct Python 3.11+ runtime for the setup, validation, synchronization, hook, and scenario scripts in this kit. | Python Software Foundation License Version 2 | 2026-09-04 | Evidence: Current scripts, CI runtime declaration, setup instructions, and upstream LICENSE |
-| [git-filter-repo](https://github.com/newren/git-filter-repo) | One-time maintainer tool used for the owner-authorized two-commit history sanitization; not a setup runtime dependency. | MIT for the tool, with alternative licensing and GPL-2.0 test-harness exceptions described in COPYING | 2026-09-08 | Evidence: Installed callback interface, upstream manual and COPYING, and reviewed two-commit rewrite |
-| [GitHub CLI](https://github.com/cli/cli) | Maintainer CLI used for repository identity, rename, publication metadata, and CI readback; not required for offline setup. | MIT | 2026-09-08 | Evidence: Installed gh command help, canonical publication checklist, and upstream LICENSE |
 
 ## Agent and workflow sources
 
@@ -52,7 +49,6 @@ Agents, official marketplaces, MCP servers, installed skills, and review or proo
 | [Anthropic Claude Code](https://github.com/anthropics/claude-code) | Primary coding agent and browser-assisted implementation workflow in prior development work. | Proprietary; Anthropic Commercial Terms (repository notice reserves rights) | 2026-08-23 | Evidence: Historical agent playbook and setup records |
 | [OpenAI Codex](https://github.com/openai/codex) | Implementation and adversarial-review agent used in cross-agent workflows. | Apache-2.0 | 2026-08-23 | Evidence: Historical agent playbook and current setup |
 | [Agent Skills](https://github.com/agentskills/agentskills) | Portable skill format adopted for the canonical project skill templates. | Apache-2.0 for code and specification; CC-BY-4.0 for documentation | 2026-09-04 | Evidence: Public specification, examples, and repository license files |
-| [Intermediate coding-agent setup kit](https://github.com/HomenShum/coding-agent-setup) | Same-owner intermediate publication whose three-host kit history is integrated into the original canonical repository. | MIT | 2026-09-08 | Evidence: Public main tree, full commit graph and unchanged LICENSE<br>Revision: 1f509066d43cae797ce8e7778f12ec01e0d22387 |
 | [OpenAI Plugins](https://github.com/openai/plugins) | Official Codex plugin marketplace and example directory inspected as a setup and plugin source. | NOASSERTION (no repository-wide license detected; individual plugins may differ) | 2026-08-23 | Evidence: Locally observed Codex plugin catalog<br>Notes: Review each selected plugin's own manifest and license before installation. |
 | [Claude Code official plugins](https://github.com/anthropics/claude-plugins-official) | Official Claude Code plugin directory used for plugin discovery and installation patterns. | Apache-2.0 for directory code; linked plugin licenses vary | 2026-08-23 | Evidence: Locally observed Claude Code marketplace |
 | [Codex plugin for Claude Code](https://github.com/openai/codex-plugin-cc) | Locally observed official bridge plugin for bounded Claude Code to Codex implementation and review workflows. | Apache-2.0 | 2026-08-23 | Evidence: Local plugin installation history |
@@ -66,7 +62,6 @@ Agents, official marketplaces, MCP servers, installed skills, and review or proo
 | [Anthropic skills](https://github.com/anthropics/skills) | Source of the frontend-design skill used as a visual implementation authority. | Apache-2.0 for skills/frontend-design; no root repository license detected | 2026-08-23 | Evidence: Historical frontend product-authority document<br>Notes: License is scoped to the referenced skill, not asserted for every directory in the repository. |
 | [Fable Method](https://github.com/Sahir619/fable-method) | Source associated with installed proof-loop, method, and independent-judge workflow skills. | MIT | 2026-08-23 | Evidence: Installed skill names and historical workflow documents<br>Notes: The installed copy did not retain an upstream commit pin. |
 | [NodeKit](https://github.com/HomenShum/NodeKit) | Repository-contract and product-promotion workflow used to define proof and release gates. | MIT | 2026-08-23 | Evidence: Historical nodekit contract and promotion goal |
-| [Langfuse](https://github.com/langfuse/langfuse) | Recommended self-hosted tracing and evaluation backend subject to deployment-profile review; not bundled. | MIT except enterprise directories | 2026-09-05 | Evidence: Primary repository license and self-hosting documentation |
 | [Cloudflare OS](https://github.com/cloudflare/cloudflare-os) | Design-pattern inspiration for a locally authored add-dimension skill; no Cloudflare OS code was bundled. | Apache-2.0 | 2026-08-23 | Evidence: Historical skill attribution header |
 | [drawio-skill](https://github.com/Agents365-ai/drawio-skill) | Installed agent skill for generating and validating editable draw.io diagrams. | MIT | 2026-08-23 | Evidence: Locally installed skill source<br>Revision: Local skill reports 1.14.0; copied snapshot has no upstream commit pin |
 | [draw.io Desktop](https://github.com/jgraph/drawio-desktop) | Native renderer/exporter used by drawio-skill for PNG, SVG, PDF, and editable diagram proof. | Apache-2.0 | 2026-08-23 | Evidence: drawio-skill runtime dependency and local application setup |
@@ -147,13 +142,9 @@ First-party repositories behind direct Python manifest declarations. Optional an
 
 First-party repositories behind direct frontend manifest declarations. Multiple packages from one monorepo appear once.
 
-The graph library added on 2026-09-05 is a fresh-application recommendation,
-not a claim of prior dependency use.
-
 | Project | Relationship | License | Accessed | Evidence and caveats |
 |---|---|---|---|---|
 | [Vercel AI SDK](https://github.com/vercel/ai) | Direct frontend dependencies for streamed AI chat state and protocol handling. | Apache-2.0 | 2026-08-23 | Evidence: Historical frontend manifest and lockfile |
-| [React Flow / xyflow](https://github.com/xyflow/xyflow) | Recommended interactive graph UI for the fresh application proof; not a kit runtime dependency. | MIT | 2026-09-05 | Evidence: Primary repository and React Flow integration documentation |
 | [Base UI](https://github.com/mui/base-ui) | Direct frontend dependency for accessible unstyled UI primitives. | MIT | 2026-08-23 | Evidence: Historical frontend manifest and lockfile |
 | [OpenTelemetry JavaScript](https://github.com/open-telemetry/opentelemetry-js) | Direct frontend dependency for telemetry API contracts. | Apache-2.0 | 2026-08-23 | Evidence: Historical frontend manifest and lockfile |
 | [Sigma.js](https://github.com/jacomyal/sigma.js) | Direct frontend graph rendering and node-border package source. | MIT | 2026-08-23 | Evidence: Historical frontend manifest and lockfile |

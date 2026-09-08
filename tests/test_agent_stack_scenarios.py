@@ -18,8 +18,6 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
-# Physical fixture paths keep OS aliases outside link-rejection scenarios.
-TEMP_ROOT = Path(tempfile.gettempdir()).resolve(strict=True)
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import agent_preflight  # noqa: E402
@@ -267,7 +265,7 @@ class AgentStateScenarios(unittest.TestCase):
 
     def test_host_switch_receipt_binds_the_current_handoff_content(self) -> None:
         """A reviewer cannot accept a missing, stale, or rootless cross-host handoff."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             handoff = root / "handoffs" / "0001" / "HANDOFF.md"
             handoff.parent.mkdir(parents=True)
@@ -304,7 +302,7 @@ class AgentStateScenarios(unittest.TestCase):
 
     def test_host_switch_receipt_does_not_follow_a_handoff_link(self) -> None:
         """A malicious project cannot redirect a handoff receipt outside its repository."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory, tempfile.TemporaryDirectory(dir=TEMP_ROOT) as outside:
+        with tempfile.TemporaryDirectory() as directory, tempfile.TemporaryDirectory() as outside:
             root = Path(directory)
             content = b"# Outside handoff\n"
             outside_handoff = Path(outside) / "HANDOFF.md"
@@ -331,7 +329,7 @@ class AgentStateScenarios(unittest.TestCase):
 
     def test_state_cli_requires_and_uses_the_explicit_event_root(self) -> None:
         """A maintainer gets a closed failure until the CLI can verify the handoff root."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             handoff = root / "handoffs" / "0001" / "HANDOFF.md"
             handoff.parent.mkdir(parents=True)
@@ -371,7 +369,7 @@ class AgentStateScenarios(unittest.TestCase):
 
     def test_each_host_switch_binds_a_distinct_immutable_snapshot(self) -> None:
         """A two-switch run cannot reuse one mutable handoff as both audit events."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             first = root / "handoffs" / "0001" / "HANDOFF.md"
             second = root / "handoffs" / "0002" / "HANDOFF.md"
@@ -408,7 +406,7 @@ class AgentStateScenarios(unittest.TestCase):
 
     def test_state_loader_rejects_growing_or_linked_inputs(self) -> None:
         """An operator cannot make the state validator follow a link or read beyond its cap."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory, tempfile.TemporaryDirectory(dir=TEMP_ROOT) as outside:
+        with tempfile.TemporaryDirectory() as directory, tempfile.TemporaryDirectory() as outside:
             root = Path(directory)
             oversized = root / "oversized.json"
             oversized.write_bytes(b"x" * (validate_agent_state.MAX_STATE_BYTES + 1))
@@ -436,7 +434,7 @@ class SkillSynchronizationScenarios(unittest.TestCase):
 
     def test_newcomer_gets_a_copy_safe_idempotent_claude_skill_tree(self) -> None:
         """A newcomer can synchronize once and rerun without creating divergent copies."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             source = self.make_source(root)
             target = root / ".claude" / "skills"
@@ -446,7 +444,7 @@ class SkillSynchronizationScenarios(unittest.TestCase):
 
     def test_maintainer_must_explicitly_replace_or_preserve_skill_drift(self) -> None:
         """A maintainer cannot silently overwrite edits in a host-specific mirror."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             source = self.make_source(root)
             target = root / ".claude" / "skills"
@@ -459,7 +457,7 @@ class SkillSynchronizationScenarios(unittest.TestCase):
 
     def test_forced_replacement_preserves_the_previous_skill_on_stage_failure(self) -> None:
         """A failed forced sync cannot erase the last usable generated skill."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             source = self.make_source(root)
             target = root / ".claude" / "skills"
@@ -483,7 +481,7 @@ class SkillSynchronizationScenarios(unittest.TestCase):
 
     def test_extra_target_skills_are_bounded_reported_and_never_removed(self) -> None:
         """A maintainer sees local-only skills while sync and removal leave them untouched."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             source = self.make_source(root)
             target = root / ".claude" / "skills"
@@ -516,7 +514,7 @@ class SkillSynchronizationScenarios(unittest.TestCase):
 
     def test_target_inventory_stops_before_an_unbounded_extra_skill_flood(self) -> None:
         """A generated mirror with excessive unknown entries fails before an unbounded scan."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             source = self.make_source(root)
             target = root / ".claude" / "skills"
@@ -528,7 +526,7 @@ class SkillSynchronizationScenarios(unittest.TestCase):
 
     def test_linked_target_root_is_rejected_before_sync_check_or_remove(self) -> None:
         """An operator cannot make the generated mirror follow a target-root directory link."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory, tempfile.TemporaryDirectory(dir=TEMP_ROOT) as outside:
+        with tempfile.TemporaryDirectory() as directory, tempfile.TemporaryDirectory() as outside:
             root = Path(directory)
             source = self.make_source(root)
             claude = root / ".claude"
@@ -552,7 +550,7 @@ class SkillSynchronizationScenarios(unittest.TestCase):
 
     def test_linked_target_parent_cannot_redirect_direct_sync_outside_project(self) -> None:
         """A direct library call cannot follow a linked host directory outside the project."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory, tempfile.TemporaryDirectory(dir=TEMP_ROOT) as outside:
+        with tempfile.TemporaryDirectory() as directory, tempfile.TemporaryDirectory() as outside:
             root = Path(directory)
             source = self.make_source(root)
             outside_claude = Path(outside) / ".claude"
@@ -577,7 +575,7 @@ class SkillSynchronizationScenarios(unittest.TestCase):
     @unittest.skipUnless(os.name == "nt", "Windows junction semantics")
     def test_windows_junctions_cannot_redirect_source_or_target_trees(self) -> None:
         """A Windows user gets the same confinement for junctions as for symbolic links."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory, tempfile.TemporaryDirectory(dir=TEMP_ROOT) as outside:
+        with tempfile.TemporaryDirectory() as directory, tempfile.TemporaryDirectory() as outside:
             root = Path(directory)
             outside_root = Path(outside)
 
@@ -619,7 +617,7 @@ class SkillSynchronizationScenarios(unittest.TestCase):
 
     def test_skill_discovery_stops_directory_and_file_floods_before_materializing_them(self) -> None:
         """A large generated skill tree cannot consume unbounded discovery memory."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             source = root / "skills"
             source.mkdir()
@@ -639,7 +637,7 @@ class SkillSynchronizationScenarios(unittest.TestCase):
 
     def test_skill_discovery_rejects_nested_links_and_growing_files(self) -> None:
         """A skill author cannot hide external content behind a link or exceed the read cap."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory, tempfile.TemporaryDirectory(dir=TEMP_ROOT) as outside:
+        with tempfile.TemporaryDirectory() as directory, tempfile.TemporaryDirectory() as outside:
             root = Path(directory)
             source = self.make_source(root)
             skill = source / "inspect-change"
@@ -661,7 +659,7 @@ class SkillSynchronizationScenarios(unittest.TestCase):
 
     def test_linked_canonical_source_is_rejected_before_cli_resolution(self) -> None:
         """The CLI cannot launder an external source tree through early path resolution."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory, tempfile.TemporaryDirectory(dir=TEMP_ROOT) as outside:
+        with tempfile.TemporaryDirectory() as directory, tempfile.TemporaryDirectory() as outside:
             root = Path(directory)
             agents = root / ".agents"
             agents.mkdir()
@@ -687,7 +685,7 @@ class SkillSynchronizationScenarios(unittest.TestCase):
 class HookContinuityScenarios(unittest.TestCase):
     def test_review_digest_changes_when_an_already_changed_file_changes_again(self) -> None:
         """A developer cannot evade another review nudge by editing the same dirty path."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "HANDOFF.md").write_text("Current handoff\n", encoding="utf-8")
             source = root / "worker.py"
@@ -700,7 +698,7 @@ class HookContinuityScenarios(unittest.TestCase):
 
     def test_review_digest_covers_public_environment_templates_but_not_local_values(self) -> None:
         """A config-template edit triggers review without fingerprinting local environment values."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             public_template = root / ".env.example"
             local_values = root / ".env.local"
@@ -717,7 +715,7 @@ class HookContinuityScenarios(unittest.TestCase):
 
     def test_review_digest_covers_files_after_the_previous_512_file_boundary(self) -> None:
         """A developer in an ordinary larger repository cannot edit a late file without a nudge."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             for index in range(513):
                 (root / f"f-{index:04d}.txt").write_text("before\n", encoding="utf-8")
@@ -729,7 +727,7 @@ class HookContinuityScenarios(unittest.TestCase):
 
     def test_review_digest_reports_bounds_instead_of_returning_a_sampled_pass(self) -> None:
         """An oversized public tree fails closed instead of reusing one partial fingerprint."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             for index in range(3):
                 (root / f"file-{index}.txt").write_text("bounded\n", encoding="utf-8")
@@ -745,7 +743,7 @@ class HookContinuityScenarios(unittest.TestCase):
 
     def test_review_digest_does_not_read_credential_named_content(self) -> None:
         """A continuity reminder fingerprints public work without processing a local secret."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             secret = root / ".env"
             secret.write_text("SYNTHETIC_VALUE=one\n", encoding="utf-8")
@@ -757,7 +755,7 @@ class HookContinuityScenarios(unittest.TestCase):
 
     def test_review_digest_excludes_private_instructions_and_generated_worktrees(self) -> None:
         """A main session does not react to private instructions or sibling worktree edits."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             private_instruction = root / "CLAUDE.local.md"
             private_instruction.write_text("private one\n", encoding="utf-8")
@@ -773,7 +771,7 @@ class HookContinuityScenarios(unittest.TestCase):
 
     def test_review_digest_includes_shared_codex_config_and_excludes_generated_host_state(self) -> None:
         """A target reviews shared Codex adapters without reacting to generated host mirrors."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             codex_config = root / ".codex" / "config.toml"
             codex_config.parent.mkdir()
@@ -798,7 +796,7 @@ class HookContinuityScenarios(unittest.TestCase):
     @unittest.skipUnless(os.name == "nt", "Windows junction semantics")
     def test_hook_state_cannot_write_through_a_windows_junction(self) -> None:
         """A hook cannot redirect its project-local checkpoint write to an outside directory."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory, tempfile.TemporaryDirectory(dir=TEMP_ROOT) as outside:
+        with tempfile.TemporaryDirectory() as directory, tempfile.TemporaryDirectory() as outside:
             root = Path(directory)
             outside_root = Path(outside)
             linked_state = root / ".agent-local"
@@ -848,7 +846,7 @@ class HookContinuityScenarios(unittest.TestCase):
 
     def test_session_start_refuses_oversized_or_external_checkpoint_content(self) -> None:
         """A resumed host cannot ingest an oversized checkpoint or one linked outside the project."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory, tempfile.TemporaryDirectory(dir=TEMP_ROOT) as outside:
+        with tempfile.TemporaryDirectory() as directory, tempfile.TemporaryDirectory() as outside:
             root = Path(directory)
             state = root / self_review_hook.STATE_DIR
             state.mkdir(parents=True)
@@ -874,7 +872,7 @@ class HookContinuityScenarios(unittest.TestCase):
 
     def test_session_start_reconstructs_only_a_strict_generated_checkpoint(self) -> None:
         """A local checkpoint edit cannot inject arbitrary instructions into a resumed host."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             state = root / self_review_hook.STATE_DIR
             state.mkdir(parents=True)
@@ -892,7 +890,7 @@ class HookContinuityScenarios(unittest.TestCase):
 
     def test_corrupt_resume_state_fails_closed_without_overwriting_evidence(self) -> None:
         """A malformed local state file is preserved for diagnosis instead of reset to empty."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             state = root / self_review_hook.STATE_DIR
             state.mkdir(parents=True)
@@ -914,7 +912,7 @@ class HookContinuityScenarios(unittest.TestCase):
 
     def test_compaction_checkpoint_uses_fingerprints_not_raw_session_content(self) -> None:
         """A person resuming work gets continuity without replaying sensitive conversation text."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload = {"session_id": "synthetic-sensitive-session-text"}
             with mock.patch.object(self_review_hook, "tree_digest", return_value="a" * 64):
@@ -932,7 +930,7 @@ class HookContinuityScenarios(unittest.TestCase):
 
     def test_concurrent_stop_events_emit_one_nudge_for_one_change_set(self) -> None:
         """Several hosts stopping together cannot corrupt state or multiply one review request."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             payload = {
                 "conversation_id": "shared-conversation",
@@ -955,7 +953,7 @@ class HookContinuityScenarios(unittest.TestCase):
 
     def test_cursor_stop_uses_real_conversation_ids_as_separate_nudge_windows(self) -> None:
         """Two Cursor conversations cannot exhaust each other's self-review limit."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             first = {"conversation_id": "cursor-conversation-a", "status": "completed", "loop_count": 0}
             second = {"conversation_id": "cursor-conversation-b", "status": "completed", "loop_count": 0}
@@ -1013,7 +1011,7 @@ class HookContinuityScenarios(unittest.TestCase):
 
     def test_claude_hook_tracks_changes_inside_its_generated_git_worktree(self) -> None:
         """A Claude worker receives continuity proof for its active worktree, not the main checkout."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT, prefix="claude hook repo ") as directory:
+        with tempfile.TemporaryDirectory(prefix="claude hook repo ") as directory:
             main_root = Path(directory) / "main project"
             scripts = main_root / "scripts"
             scripts.mkdir(parents=True)
@@ -1068,7 +1066,7 @@ class HookContinuityScenarios(unittest.TestCase):
 
     def test_claude_ordinary_non_git_cwd_keeps_the_configured_project_root(self) -> None:
         """A non-Git project can use the hook until it enters the reserved worktree namespace."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             nested = root / "src" / "nested"
             nested.mkdir(parents=True)
@@ -1082,7 +1080,7 @@ class HookContinuityScenarios(unittest.TestCase):
 
     def test_claude_rejects_a_linked_directory_in_the_worktree_namespace(self) -> None:
         """A crafted worktree path cannot redirect checkpoint state outside the project."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory, tempfile.TemporaryDirectory(dir=TEMP_ROOT) as outside:
+        with tempfile.TemporaryDirectory() as directory, tempfile.TemporaryDirectory() as outside:
             main_root = Path(directory)
             namespace = main_root / ".claude" / "worktrees"
             namespace.mkdir(parents=True)
@@ -1101,7 +1099,7 @@ class HookContinuityScenarios(unittest.TestCase):
 
     def test_claude_rejects_an_unrelated_repository_in_the_worktree_namespace(self) -> None:
         """A nested repository cannot impersonate a generated worktree for this project."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             main_root = Path(directory)
             subprocess.run(["git", "init", "--quiet", str(main_root)], check=True)
             (main_root / "tracked.txt").write_text("main\n", encoding="utf-8")
@@ -1126,7 +1124,7 @@ class HookContinuityScenarios(unittest.TestCase):
 
     def test_claude_worktree_identity_ignores_poisoned_git_environment(self) -> None:
         """Inherited Git routing variables cannot move a valid hook into another repository."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             main_root = Path(directory) / "main"
             main_root.mkdir()
             (main_root / "tracked.txt").write_text("main\n", encoding="utf-8")
@@ -1158,7 +1156,7 @@ class HookContinuityScenarios(unittest.TestCase):
 
     def test_git_identity_probe_enforces_one_deadline_and_output_cap(self) -> None:
         """A stuck or noisy Git process cannot hold a hook open or fill memory."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             with mock.patch.object(
                 self_review_hook,
@@ -1178,7 +1176,7 @@ class HookContinuityScenarios(unittest.TestCase):
 
     def test_sustained_sessions_remain_bounded(self) -> None:
         """A long-running workstation does not accumulate an unbounded session history."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             with mock.patch.object(self_review_hook, "tree_digest", return_value="c" * 64):
                 for index in range(96):
@@ -1190,7 +1188,7 @@ class HookContinuityScenarios(unittest.TestCase):
 
     def test_active_session_keeps_its_nudge_cap_under_eviction_pressure(self) -> None:
         """A busy workstation cannot reset one active session's cap by evicting each update."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             active_payload: dict[str, object] | None = None
             active_key = ""
@@ -1229,7 +1227,7 @@ class HookContinuityScenarios(unittest.TestCase):
 
     def test_each_host_gets_its_native_stop_continuation_shape(self) -> None:
         """Each host receives a review nudge in the output shape its hook runner accepts."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             with mock.patch.object(self_review_hook, "tree_digest", return_value="d" * 64):
                 cursor = self_review_hook.stop_output(
@@ -1260,7 +1258,7 @@ class HookContinuityScenarios(unittest.TestCase):
 
     def test_stop_hooks_do_not_continue_failed_or_still_running_work(self) -> None:
         """A failure or background task cannot be mistaken for an idle review boundary."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             self.assertEqual(
                 {},
@@ -1324,7 +1322,7 @@ class SetupDoctorScenarios(unittest.TestCase):
 
     def test_newcomer_sees_all_three_hosts_ready_without_credential_store_reads(self) -> None:
         """A newcomer can inspect setup shape before signing into any vendor."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             self.build_project(root)
             results = setup_doctor.inspect_project(root, ("codex", "claude", "cursor"), True)
@@ -1335,7 +1333,7 @@ class SetupDoctorScenarios(unittest.TestCase):
     def test_cursor_desktop_only_user_can_validate_project_adapters_without_agent_cli(self) -> None:
         """A desktop user can prove repository shape without installing the optional CLI."""
 
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             self.build_project(root)
             with mock.patch.object(setup_doctor.shutil, "which", return_value=None):
@@ -1348,7 +1346,7 @@ class SetupDoctorScenarios(unittest.TestCase):
     def test_claude_desktop_only_user_can_validate_adapters_without_cli(self) -> None:
         """A Desktop user can prove Claude adapter shape without the separate CLI."""
 
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             self.build_project(root)
             with mock.patch.object(setup_doctor.shutil, "which", return_value=None):
@@ -1365,7 +1363,7 @@ class SetupDoctorScenarios(unittest.TestCase):
     def test_codex_desktop_only_user_can_validate_adapters_without_cli(self) -> None:
         """An app user can prove Codex adapter shape without a separate terminal CLI."""
 
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             self.build_project(root)
             with mock.patch.object(setup_doctor.shutil, "which", return_value=None):
@@ -1382,7 +1380,7 @@ class SetupDoctorScenarios(unittest.TestCase):
     def test_setup_doctor_parses_optional_cursor_desktop_and_cli_policies(self) -> None:
         """A Cursor user gets a malformed-policy failure after opting into any policy lane."""
 
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             self.build_project(root)
             for relative in (
@@ -1410,7 +1408,7 @@ class SetupDoctorScenarios(unittest.TestCase):
 
     def test_documented_python_checks_leave_no_untracked_cache_debris(self) -> None:
         """A freshly staged project stays clean after the setup doctor imports its helpers."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             self.build_project(root)
             shutil.copy2(ROOT / "templates/project/.gitignore", root / ".gitignore")
@@ -1448,7 +1446,7 @@ class SetupDoctorScenarios(unittest.TestCase):
 
     def test_newcomer_sees_missing_git_as_a_runtime_blocker(self) -> None:
         """A newcomer cannot receive a ready report when Git-dependent setup cannot run."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             self.build_project(root)
             with mock.patch.object(
@@ -1466,7 +1464,7 @@ class SetupDoctorScenarios(unittest.TestCase):
 
     def test_operator_gets_distinct_missing_and_malformed_diagnostics(self) -> None:
         """An operator can tell an absent adapter from a broken one."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             self.build_project(root)
             (root / ".cursor" / "mcp.json").write_text("{broken", encoding="utf-8")
@@ -1478,7 +1476,7 @@ class SetupDoctorScenarios(unittest.TestCase):
 
     def test_operator_is_stopped_by_config_directories_and_external_symlinks(self) -> None:
         """A setup audit cannot accept a directory or follow a config link outside the project."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory, tempfile.TemporaryDirectory(dir=TEMP_ROOT) as outside:
+        with tempfile.TemporaryDirectory() as directory, tempfile.TemporaryDirectory() as outside:
             root = Path(directory)
             self.build_project(root)
             cursor = root / ".cursor" / "mcp.json"
@@ -1503,7 +1501,7 @@ class SetupDoctorScenarios(unittest.TestCase):
     @unittest.skipUnless(os.name == "nt", "Windows junction semantics")
     def test_setup_doctor_rejects_a_windows_junctioned_config_parent(self) -> None:
         """A setup diagnosis cannot validate host configuration stored outside the project."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory, tempfile.TemporaryDirectory(dir=TEMP_ROOT) as outside:
+        with tempfile.TemporaryDirectory() as directory, tempfile.TemporaryDirectory() as outside:
             root = Path(directory)
             outside_claude = Path(outside) / "claude"
             outside_claude.mkdir()
@@ -1532,7 +1530,7 @@ class SetupDoctorScenarios(unittest.TestCase):
 class PublicTemplateScenarios(unittest.TestCase):
     def test_branch_stack_requires_a_relationship_instead_of_passing_vacuously(self) -> None:
         """A reviewer cannot receive a green stack receipt from only one branch ref."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             completed = subprocess.run(
                 [
                     sys.executable,
@@ -1551,7 +1549,7 @@ class PublicTemplateScenarios(unittest.TestCase):
 
     def test_branch_stack_rejects_an_overlong_ref_without_a_traceback(self) -> None:
         """An untrusted branch name cannot overflow the bounded process contract."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory, mock.patch.object(
+        with tempfile.TemporaryDirectory() as directory, mock.patch.object(
             sys,
             "argv",
             ["check_branch_stack.py", "x" * 9_000, "HEAD", "--project-root", directory],
@@ -1563,7 +1561,7 @@ class PublicTemplateScenarios(unittest.TestCase):
 
     def test_branch_stack_ignores_ambient_git_redirection(self) -> None:
         """A poisoned shell cannot redirect ancestry proof away from the explicit repository."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             tracked = root / "tracked.txt"
             tracked.write_text("one\n", encoding="utf-8")
@@ -1602,7 +1600,7 @@ class PublicTemplateScenarios(unittest.TestCase):
     def test_branch_stack_ignores_a_replacement_that_forges_ancestry(self) -> None:
         """A replacement object cannot make sibling branches look stacked."""
 
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             tracked = root / "tracked.txt"
             tracked.write_text("base\n", encoding="utf-8")
@@ -1671,7 +1669,7 @@ class PublicTemplateScenarios(unittest.TestCase):
     def test_branch_stack_rejects_a_suppressed_legacy_graft(self) -> None:
         """A graft cannot make sibling branches look stacked."""
 
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             tracked = root / "tracked.txt"
             tracked.write_text("base\n", encoding="utf-8")
@@ -1738,7 +1736,7 @@ class PublicTemplateScenarios(unittest.TestCase):
     def test_branch_stack_terminates_revision_options_before_user_refs(self) -> None:
         """A dash-prefixed ref is data, not another merge-base option."""
 
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory, mock.patch.object(
+        with tempfile.TemporaryDirectory() as directory, mock.patch.object(
             check_branch_stack,
             "effective_graft_error",
             return_value=None,
@@ -1806,7 +1804,7 @@ class PublicTemplateScenarios(unittest.TestCase):
 
     def test_graphite_status_never_initializes_a_fresh_repository(self) -> None:
         """Requesting optional stack status cannot create Graphite metadata in a new Git repository."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             subprocess.run(["git", "init", "--quiet", str(root)], check=True)
             tracked = root / "tracked.txt"
@@ -1948,46 +1946,53 @@ class PublicTemplateScenarios(unittest.TestCase):
             parsed["mcp_servers"]["project_tools"]["command"],
         )
 
-    def materialize_new_git_project(self, root: Path) -> None:
-        """Exercise the documented CLI, not a second copy of its placement map."""
-        subprocess.run(["git", "init", "--quiet", "--template=", str(root)], check=True, timeout=10)
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as receipts:
-            plan = Path(receipts) / "plan.json"
-            for args in (
-                ["plan", "--out", str(plan)],
-                ["apply", "--plan", str(plan), "--all-missing", "--receipt", str(Path(receipts) / "progress.jsonl")],
-            ):
-                result = subprocess.run(
-                    [sys.executable, "-B", str(ROOT / "scripts/setup_project.py"), *args, "--target", str(root)],
-                    capture_output=True, text=True, timeout=60,
-                )
-                self.assertEqual(0, result.returncode, result.stdout + result.stderr)
-            report = json.loads(result.stdout)
-            self.assertEqual("UNCONFIGURED", report["status"])
-            self.assertFalse(report["activation"])
-
     def test_documented_bootstrap_stops_when_one_native_copy_is_missing(self) -> None:
-        """A newcomer sees a missing native adapter after otherwise successful adoption."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        """A fresh-project setup cannot finish successfully after a copy step is lost."""
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            self.materialize_new_git_project(root)
-            (root / ".cursor/mcp.json").unlink()
+            shutil.copytree(ROOT / "templates" / "project", root, dirs_exist_ok=True)
+            for source, target in (
+                ("templates/codex/project.config.toml", ".codex/config.toml"),
+                ("templates/claude/settings.json", ".claude/settings.json"),
+            ):
+                destination = root / target
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(ROOT / source, destination)
+            for source, target in (
+                ("templates/codex/agents", ".codex/agents"),
+                ("templates/claude/agents", ".claude/agents"),
+                ("templates/cursor/agents", ".cursor/agents"),
+            ):
+                shutil.copytree(ROOT / source, root / target)
+            (root / ".claude" / "skills").mkdir()
+            (root / "scripts").mkdir()
+            for name in ("path_safety.py", "setup_doctor.py"):
+                shutil.copy2(ROOT / "scripts" / name, root / "scripts" / name)
+
             completed = subprocess.run(
-                [sys.executable, "-B", str(root / "scripts/setup_doctor.py"),
-                 "--project-root", str(root), "--skip-binaries"],
-                capture_output=True, text=True, timeout=10,
+                [
+                    sys.executable,
+                    str(root / "scripts" / "setup_doctor.py"),
+                    "--project-root",
+                    str(root),
+                    "--skip-binaries",
+                ],
+                capture_output=True,
+                text=True,
+                timeout=10,
             )
+
             self.assertEqual(2, completed.returncode, completed.stdout + completed.stderr)
             self.assertIn("MISSING: cursor .cursor/mcp.json", completed.stdout)
-            setup = (ROOT / "docs/setup.md").read_text(encoding="utf-8")
+            setup = (ROOT / "docs" / "setup.md").read_text(encoding="utf-8")
             self.assertIn("set -eu", setup)
             self.assertIn("throw 'Setup diagnosis failed'", setup)
 
     def test_newcomer_gets_an_honest_no_gate_after_documented_materialization(self) -> None:
         """A newcomer cannot inherit the kit's green evidence as target-project proof."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            self.materialize_new_git_project(root)
+            shutil.copytree(ROOT / "templates" / "project", root, dirs_exist_ok=True)
             ignore = (root / ".gitignore").read_text(encoding="utf-8")
             self.assertIn(".claude/skills/", ignore)
             self.assertIn(".agent-local/", ignore)
@@ -2016,6 +2021,56 @@ class PublicTemplateScenarios(unittest.TestCase):
             ):
                 self.assertTrue((root / relative).is_file(), relative)
 
+            copies = (
+                ("templates/codex/project.config.toml", ".codex/config.toml"),
+                ("templates/claude/settings.json", ".claude/settings.json"),
+                ("templates/cursor/mcp.json", ".cursor/mcp.json"),
+            )
+            for source, target in copies:
+                destination = root / target
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(ROOT / source, destination)
+
+            for source, target in (
+                ("templates/codex/agents", ".codex/agents"),
+                ("templates/claude/agents", ".claude/agents"),
+                ("templates/cursor/agents", ".cursor/agents"),
+                ("templates/harness", "templates/harness"),
+            ):
+                shutil.copytree(ROOT / source, root / target)
+
+            shutil.copy2(
+                root / "templates" / "harness" / "preflight.target.json",
+                root / "templates" / "harness" / "preflight.json",
+            )
+            shutil.copy2(
+                root / "templates" / "harness" / "self-review.target.json",
+                root / "templates" / "harness" / "self-review.json",
+            )
+
+            (root / "scripts").mkdir()
+            for name in (
+                "agent_preflight.py",
+                "bounded_process.py",
+                "git_safety.py",
+                "prove_preflight_mutations.py",
+                "validate_agent_state.py",
+                "sync_skills.py",
+                "self_review_hook.py",
+                "setup_doctor.py",
+                "check_branch_stack.py",
+                "check_claim_language.py",
+                "path_safety.py",
+                "validate_skill_receipt.py",
+            ):
+                shutil.copy2(ROOT / "scripts" / name, root / "scripts" / name)
+            (root / "tests").mkdir()
+            shutil.copy2(
+                ROOT / "tests" / "test_preflight_mutations.py",
+                root / "tests" / "test_preflight_mutations.py",
+            )
+
+            sync_skills.sync(root / ".agents" / "skills", root / ".claude" / "skills", force=False)
             doctor = setup_doctor.inspect_project(root, ("codex", "claude", "cursor"), True)
             setup_doctor.parse_configs(root, doctor)
             self.assertFalse([item for item in doctor if item["status"] != "present"])
@@ -2035,20 +2090,6 @@ class PublicTemplateScenarios(unittest.TestCase):
             self.assertEqual(
                 {"Git": "present", "Python >= 3.11": "present"}, runtime_statuses
             )
-            for command in ("check", "demo"):
-                learning = subprocess.run(
-                    [sys.executable, "-B", "scripts/bootstrap_learning.py", command],
-                    cwd=root, capture_output=True, text=True, timeout=15, check=False,
-                )
-                self.assertEqual(0, learning.returncode, learning.stdout + learning.stderr)
-                result = json.loads(learning.stdout)
-                if command == "demo":
-                    self.assertEqual("NUMERICALLY_ELIGIBLE", result["verdict"])
-                    self.assertTrue(result["synthetic"])
-                    self.assertFalse(result["activated"])
-                else:
-                    self.assertEqual("VALID_SCAFFOLD", result["status"])
-                    self.assertFalse(result["application_verified"])
 
     def test_each_host_adapter_parses_and_all_skills_have_discovery_metadata(self) -> None:
         """A maintainer can prove the distributed examples are parseable before copying them."""
@@ -2090,8 +2131,8 @@ class PublicTemplateScenarios(unittest.TestCase):
         self.assertIn("read-only diagnostic", setup)
         self.assertNotIn("skips the workspace trust dialog and starts stdio servers", setup)
         self.assertIn("--hosts codex --skip-binaries", setup)
-        self.assertIn('setup_project.py plan --target /path/to/project --out /path/to/review/setup-plan.json', setup)
-        self.assertIn('--include AGENT_INVARIANTS.md --receipt /path/to/review/setup-progress.jsonl', setup)
+        self.assertIn('KIT_ROOT="/path/to/codex-claude-code-setup"', setup)
+        self.assertIn('PROJECT_ROOT="/path/to/new-project"', setup)
         self.assertIn("templates/codex/config.toml", setup)
         self.assertIn("templates/claude/settings.local.json.example", setup)
         self.assertIn(".claude/settings.local.json", setup)
@@ -2195,7 +2236,7 @@ class PublicTemplateScenarios(unittest.TestCase):
         skill_root = ROOT / catalog["canonical_root"]
         names = sorted(path.name for path in skill_root.iterdir() if path.is_dir())
         self.assertEqual(catalog["skills"], names)
-        self.assertEqual(18, len(names))
+        self.assertEqual(16, len(names))
         for name in names:
             skill = skill_root / name
             self.assertLess(len((skill / "SKILL.md").read_text(encoding="utf-8").splitlines()), 100)
@@ -2263,7 +2304,7 @@ class PublicTemplateScenarios(unittest.TestCase):
     def test_codex_windows_hook_resolves_a_metachar_git_root_from_a_nested_directory(self) -> None:
         """A Windows user can start below a metacharacter-bearing root without losing hooks."""
 
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT, prefix="hook repo & ") as directory:
+        with tempfile.TemporaryDirectory(prefix="hook repo & ") as directory:
             target = Path(directory) / "project with spaces & marker"
             script_directory = target / "scripts"
             nested = target / "docs" / "nested"
@@ -2312,7 +2353,7 @@ class PublicTemplateScenarios(unittest.TestCase):
             "evidence": ["fixture:handoff-replay"],
             "verification": "The handoff scenario replay exited 0.",
         }
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             receipt_path = Path(directory) / "receipt.json"
             receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
             advertised_argv = [
@@ -2346,7 +2387,7 @@ class PublicTemplateScenarios(unittest.TestCase):
 
     def test_claim_checker_requires_a_receipt_next_to_completion_language(self) -> None:
         """A reviewer sees unsupported delivery language before it reaches a handoff."""
-        with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "HANDOFF.md"
             path.write_text("The migration is complete.\n", encoding="utf-8")
             self.assertTrue(check_claim_language.check(path))
