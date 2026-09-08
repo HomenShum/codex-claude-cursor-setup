@@ -7,9 +7,8 @@
       "Grep"
     ],
     "deny": [
-      "Read(./.env)",
-      "Read(./.env.*)",
-      "Read(./secrets/**)"
+      "Read(/**/.env*)",
+      "Read(/**/secrets/**)"
     ],
     "defaultMode": "default"
   }

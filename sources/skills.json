@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "canonical_root": "templates/project/.agents/skills",
+  "license": "MIT",
+  "skills": [
+    "append-sourced-decision",
+    "assemble-proof-packet",
+    "bootstrap-evidence-app",
+    "build-evidence-packet",
+    "capture-ui-before-after",
+    "decide-ship-skip-defer",
+    "initialize-scoped-branch",
+    "planner-workers-judge",
+    "profile-enterprise-deployment",
+    "publish-visual-tutorial",
+    "reconcile-claims-to-landed",
+    "refresh-handoff",
+    "review-change-stack",
+    "run-agent-graph",
+    "run-constrained-worker",
+    "run-deterministic-preflight",
+    "sweep-collisions",
+    "verify-coverage-claims"
+  ]
+}

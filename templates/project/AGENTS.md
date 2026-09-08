@@ -1,5 +1,9 @@
 # [PROJECT_NAME] instructions
 
+Before changing files, read the complete
+[portable invariants](AGENT_INVARIANTS.md). Project policy may tighten those
+rules but must not silently weaken them.
+
 ## Product boundary
 
 [One paragraph: who uses this project, the decision or job they complete, what
@@ -18,7 +22,7 @@ the system may do, and what it must never do.]
 [START_COMMAND]
 ```
 
-## Verify it
+## Verification
 
 ```bash
 [FAST_OFFLINE_TEST]

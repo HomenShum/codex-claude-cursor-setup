@@ -5,6 +5,8 @@ description: Verify a completed change against raw artifacts and one named user 
 
 # Example proof skill
 
+Read [the execution contract](references/contract.json) before starting. Validate the final receipt with its parameterized `verification.argv`, replacing `{python}`, `{skill_dir}`, and `{receipt}` with concrete local values.
+
 ## Inputs
 
 - the user's requested outcome;
@@ -19,8 +21,9 @@ description: Verify a completed change against raw artifacts and one named user 
 3. Re-run the narrow verification from a clean state.
 4. Exercise one realistic failure or degraded path.
 5. Compare the observation with the named proof.
-6. Return `VERIFIED`, `VERIFIED WITH CAVEATS`, or `NOT VERIFIED`, followed by
-   the evidence and the smallest next repair.
+6. Return the five-field contract receipt. Use `PASS` only when the proof was
+   observed, `BLOCKED` for a named external impediment, and `UNVERIFIED` when
+   evidence is absent or contradictory.
 
 ## Boundaries
 

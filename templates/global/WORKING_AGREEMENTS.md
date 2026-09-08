@@ -1,7 +1,14 @@
 # Personal working agreements
 
-Adapt this file before placing it in `~/.codex/AGENTS.md` or
-`~/.claude/CLAUDE.md`. Remove modes and checks that do not fit your work.
+Adapt this file before placing it in `~/.codex/AGENTS.md`,
+`~/.claude/CLAUDE.md`, or a Cursor rule. The recommended Cursor lane is synced
+**Customize → Rules → User Rules**. A machine-local Cursor rule must be named
+`~/.cursor/rules/working-agreements.mdc` (Windows:
+`%USERPROFILE%\.cursor\rules\working-agreements.mdc`) and prepend valid rule
+frontmatter with `description`, empty `globs`, and `alwaysApply: true` before
+this reviewed body. Plain `.md` files in that directory are ignored. Both
+Cursor lanes guide Agent (Chat), not Cursor Tab or Inline Edit.
+Remove modes and checks that do not fit your work.
 
 ## Modes
 

@@ -1,9 +1,10 @@
 # Repository instructions
 
-This repository is a public, vendor-neutral setup kit for OpenAI Codex and
-Anthropic Claude Code. It contains documentation, safe configuration examples,
-and validation code. It does not contain credentials, copied session history,
-private project source, or machine-specific configuration.
+This repository is a public, vendor-neutral setup kit for OpenAI Codex,
+Anthropic Claude Code, and Cursor. It contains documentation, inert
+configuration examples, portable skills, and validation code. It does not
+contain credentials, session transcripts, private project source, or
+machine-specific configuration.
 
 ## Sources of truth
 
@@ -11,19 +12,34 @@ private project source, or machine-specific configuration.
 - `docs/setup.md` owns installation, file placement, and configuration scope.
 - `docs/mcp-and-agent-bridges.md` owns MCP and cross-agent setup.
 - `docs/skills-plugins-hooks.md` owns reusable workflow extensions.
+- `docs/capability-matrix.md` owns the current three-host path mapping.
+- `docs/repository-migration.md` owns canonical repository identity, subscriber
+  migration, and publication verification. Before pushing, verify GitHub ID
+  `1344270714`, not merely the configured remote name or branch equality.
+- `docs/preflight-and-continuity.md` owns deterministic gate and hook-state
+  behavior.
 - `sources/external-projects.json` is the machine-readable third-party ledger.
 - `sources/official-docs.json` is the machine-readable vendor-document ledger.
+- `sources/host-capabilities.json` and `sources/skills.json` are the
+  machine-readable host and canonical-skill catalogs.
 - `templates/` contains examples only. No example may contain a working token,
-  private hostname, personal absolute path, or destructive default.
+  private hostname, personal absolute path, destructive default, or
+  automatically active hook.
 
 ## Change rules
 
-- Check current OpenAI and Anthropic documentation before changing a product
-  command or configuration key. Record the access date.
+- Check current OpenAI, Anthropic, and Cursor documentation before changing a
+  host command, path, event, or configuration key. Record the access date.
 - Add every deliberately used or recommended GitHub repository to
   `sources/external-projects.json` and `docs/external-projects.md`.
-- Keep `AGENTS.md` canonical. Root `CLAUDE.md` imports it and may add only
-  Claude Code-specific guidance.
+- Keep `AGENTS.md` canonical. Claude imports it from `.claude/CLAUDE.md` with
+  `@../AGENTS.md`; no root `CLAUDE.md` exists for Cursor to load a second copy.
+  Put Claude-only guidance in `.claude/rules/`.
+- Keep project skills canonical at `.agents/skills`. Codex and Cursor consume
+  that tree directly; Claude Code receives a checked `.claude/skills` copy
+  through `scripts/sync_skills.py`.
+- Keep MCP, hooks, and subagents host-native. Shared behavior does not justify
+  translating one host's configuration into another host's file.
 - Put credentials in environment variables or an external secret store. Never
   place them in command arguments, MCP URLs, committed JSON, or TOML.
 - Hooks execute code with the user's authority. Examples must be disabled by
@@ -40,6 +56,8 @@ Run from the repository root:
 ```bash
 python scripts/validate_repo.py
 python -m unittest discover -s tests -v
+python scripts/agent_preflight.py --config templates/harness/preflight.json
+python scripts/prove_preflight_mutations.py
 python scripts/validate_repo.py --check-external
 git diff --check
 ```
@@ -49,8 +67,9 @@ tests must pass without credentials or network access.
 
 ## Completion bar
 
-A change is complete only when a new user can identify where each file belongs,
-the templates parse, every local link resolves, all external projects are
-attributed, the secret scan is clean, and the scenario suite passes. A green
-command is evidence for that command only; do not call remote content published
-until the public repository is fetched and the promised files are observed.
+A change is complete only when a new user can identify every destination,
+reproduce the Claude skill mirror, parse the templates, resolve all local
+links, trace external sources, observe a deliberate preflight mutation fail,
+and pass the scenario suite. A green command is evidence for that command
+only; do not call remote content published until the public repository is
+fetched and the promised files are observed.

@@ -11,6 +11,8 @@ from unittest import mock
 
 
 ROOT = Path(__file__).resolve().parents[1]
+# Physical fixture paths keep OS aliases outside link-rejection scenarios.
+TEMP_ROOT = Path(tempfile.gettempdir()).resolve(strict=True)
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import validate_repo  # noqa: E402
@@ -18,7 +20,7 @@ import validate_repo  # noqa: E402
 
 class SetupPublicationScenarios(unittest.TestCase):
     def copy_repository(self) -> tuple[tempfile.TemporaryDirectory[str], Path]:
-        temporary = tempfile.TemporaryDirectory()
+        temporary = tempfile.TemporaryDirectory(dir=TEMP_ROOT)
         target = Path(temporary.name) / "repo"
         shutil.copytree(ROOT, target, ignore=shutil.ignore_patterns(".git", "__pycache__"))
         return temporary, target
@@ -48,6 +50,37 @@ class SetupPublicationScenarios(unittest.TestCase):
         errors = validate_repo.validate_repo(target)
         self.assertTrue(any("possible private key" in error for error in errors))
 
+    def test_publisher_is_stopped_by_drive_root_and_unc_machine_paths(self) -> None:
+        """A public guide cannot retain workstation-specific Windows locations."""
+        temporary, target = self.copy_repository()
+        self.addCleanup(temporary.cleanup)
+        slash = chr(92)
+        drive_path = f"D:{slash}Private{slash}project"
+        unc_path = f"{slash}{slash}server{slash}Alice{slash}secret"
+        (target / "machine-note.txt").write_text(
+            f"drive={drive_path}\nshare={unc_path}\n",
+            encoding="utf-8",
+        )
+
+        errors = validate_repo.validate_repo(target)
+
+        path_errors = [error for error in errors if "personal absolute path" in error]
+        self.assertGreaterEqual(len(path_errors), 2)
+
+    def test_documented_windows_placeholders_remain_publication_safe(self) -> None:
+        """Generic setup placeholders stay usable while concrete machine roots are blocked."""
+        slash = chr(92)
+        content = (
+            f"C:{slash}path{slash}to{slash}kit\n"
+            f"{slash}{slash}server{slash}share{slash}project\n"
+            "C:/Users/[WINDOWS_USER]/project\n"
+            "/Users/[WINDOWS_USER]/project\n"
+            f"{slash}{slash}wsl.localhost{slash}[DISTRIBUTION]{slash}project\n"
+        )
+        self.assertFalse(
+            any(pattern.search(content) for pattern in validate_repo.PERSONAL_PATH_PATTERNS)
+        )
+
     def test_reviewer_is_stopped_by_an_unattributed_repository(self) -> None:
         """A reviewer needs the source and license before accepting borrowed work."""
         temporary, target = self.copy_repository()
@@ -56,6 +89,34 @@ class SetupPublicationScenarios(unittest.TestCase):
             stream.write("\nhttps://" + "github.com/example/unattributed-tool\n")
         errors = validate_repo.validate_repo(target)
         self.assertTrue(any("uncatalogued GitHub repository" in error for error in errors))
+
+    def test_subscriber_can_follow_canonical_links_without_exempting_other_sources(self) -> None:
+        """A subscriber can follow renamed kit paths; a copied third-party link still needs attribution."""
+        temporary, target = self.copy_repository()
+        self.addCleanup(temporary.cleanup)
+        guide = target / "subscriber-test.md"
+        guide.write_text(
+            "https://github.com/HomenShum/codex-claude-cursor-setup/tree/main/templates/cursor\n",
+            encoding="utf-8",
+        )
+        self.assertEqual([], validate_repo.validate_repo(target))
+        with guide.open("a", encoding="utf-8") as stream:
+            stream.write("https://" + "github.com/example/not-the-canonical-kit\n")
+        self.assertTrue(any(
+            "uncatalogued GitHub repository" in error
+            for error in validate_repo.validate_repo(target)
+        ))
+
+    def test_migration_maintainer_can_cite_primary_docs_but_not_spoofed_hosts(self) -> None:
+        """A maintainer can verify rename/lease advice without broadening network authority."""
+        for url in (
+            "https://docs.github.com/en/repositories/creating-and-managing-repositories/renaming-a-repository",
+            "https://git-scm.com/docs/git-push",
+        ):
+            self.assertEqual(url, validate_repo.normalize_doc_url(url))
+        for host in ("docs.github.com.invalid", "git-scm.com.invalid", "127.0.0.1"):
+            with self.subTest(host=host), self.assertRaises(ValueError):
+                validate_repo.normalize_doc_url(f"https://{host}/migration")
 
     def test_release_engineer_is_stopped_by_an_unattributed_action(self) -> None:
         """A release engineer needs every executable CI dependency in the ledger."""
@@ -142,6 +203,23 @@ class SetupPublicationScenarios(unittest.TestCase):
         cap_errors = [error for error in errors if "public file cap exceeded" in error]
         self.assertEqual(1, len(cap_errors))
         self.assertLessEqual(len(errors), validate_repo.MAX_VALIDATION_ERRORS)
+
+    def test_large_publication_content_stops_once_at_a_total_byte_cap(self) -> None:
+        """A publisher cannot make bounded individual files accumulate without a total cap."""
+        temporary, target = self.copy_repository()
+        self.addCleanup(temporary.cleanup)
+        (target / "bounded-a.txt").write_text("a" * 60, encoding="utf-8")
+        (target / "bounded-b.txt").write_text("b" * 60, encoding="utf-8")
+        discovery_errors = validate_repo.BoundedErrors()
+        discovered = validate_repo.collect_public_files(target, discovery_errors)
+        self.assertEqual([], discovery_errors)
+        observed_total = sum(path.stat().st_size for path in discovered)
+
+        with mock.patch.object(validate_repo, "MAX_PUBLIC_TOTAL_BYTES", observed_total - 1):
+            errors = validate_repo.validate_repo(target)
+
+        cap_errors = [error for error in errors if "public byte cap exceeded" in error]
+        self.assertEqual(1, len(cap_errors))
 
     def test_disappearing_file_is_a_controlled_read_failure(self) -> None:
         """A concurrent cleanup cannot turn validation into an uncaught traceback."""

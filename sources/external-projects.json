@@ -1,9 +1,90 @@
 {
   "schema_version": 1,
-  "accessed": "2026-08-23",
-  "scope": "Direct agents, workflow authorities, installed or evaluated extensions, CI and audit tools, media assets, first-party repositories behind direct package declarations, container images, and explicitly recorded research candidates. Transitive packages are excluded.",
+  "accessed": "2026-09-08",
+  "scope": "Bounded direct-source corpus reconstructed through 2026-09-04 from the supplied setup inventory, sanitized direct dependency and container declarations, local extension records, current kit configuration, and primary public repositories. Historical application code and prose, private repositories, and transitive packages are excluded.",
+  "methodology": {
+    "current_kit_direct": [
+      "https://github.com/git/git",
+      "https://github.com/python/cpython",
+      "https://github.com/actions/checkout",
+      "https://github.com/actions/setup-python"
+    ],
+    "current_kit_authorities": [
+      "https://github.com/anthropics/claude-code",
+      "https://github.com/openai/codex",
+      "https://github.com/agentskills/agentskills",
+      "https://github.com/SchemaStore/schemastore",
+      "https://github.com/openai/codex-plugin-cc",
+      "https://github.com/Sahir619/fable-method",
+      "https://github.com/newren/git-filter-repo",
+      "https://github.com/cli/cli",
+      "https://github.com/HomenShum/coding-agent-setup"
+    ],
+    "required_historical_sources": [
+      "https://github.com/Vistyy/nopus",
+      "https://github.com/anthropics/claude-code-action",
+      "https://github.com/DietrichGebert/ponytail",
+      "https://github.com/upstash/context7",
+      "https://github.com/openai/codex-plugin-cc",
+      "https://github.com/thedotmack/claude-mem"
+    ],
+    "historical_evidence": [
+      "supplied setup inventory",
+      "sanitized direct dependency and lockfile declarations",
+      "sanitized container and CI declarations",
+      "local extension manifests and attribution records",
+      "historical architecture and product-authority notes"
+    ],
+    "excluded": [
+      "historical application source and prose",
+      "private repository identities",
+      "transitive packages",
+      "ambient operating-system shells and base copy, search, and directory utilities; these are cited through vendor or platform documentation rather than reconstructed as repository dependencies",
+      "credentials, sessions, caches, and workstation paths"
+    ]
+  },
   "license_notice": "License labels are discovery aids, not legal advice. NOASSERTION means no reliable repository-wide license was established during this audit; it does not mean public-domain or unrestricted use.",
   "projects": [
+    {
+      "name": "Git",
+      "repository": "https://github.com/git/git",
+      "category": "platform-tool",
+      "relationship": "Direct runtime prerequisite for bootstrap, generated-worktree identity checks, and branch-stack ancestry proof in this kit.",
+      "license": "GPL-2.0-only for the main project; compatible licenses apply to identified parts",
+      "accessed": "2026-09-04",
+      "evidence": "Current setup instructions, hook implementation, branch-stack checker, and upstream repository notice",
+      "confidence": "high"
+    },
+    {
+      "name": "CPython",
+      "repository": "https://github.com/python/cpython",
+      "category": "platform-tool",
+      "relationship": "Direct Python 3.11+ runtime for the setup, validation, synchronization, hook, and scenario scripts in this kit.",
+      "license": "Python Software Foundation License Version 2",
+      "accessed": "2026-09-04",
+      "evidence": "Current scripts, CI runtime declaration, setup instructions, and upstream LICENSE",
+      "confidence": "high"
+    },
+    {
+      "name": "git-filter-repo",
+      "repository": "https://github.com/newren/git-filter-repo",
+      "category": "platform-tool",
+      "relationship": "One-time maintainer tool used for the owner-authorized two-commit history sanitization; not a setup runtime dependency.",
+      "license": "MIT for the tool, with alternative licensing and GPL-2.0 test-harness exceptions described in COPYING",
+      "accessed": "2026-09-08",
+      "evidence": "Installed callback interface, upstream manual and COPYING, and reviewed two-commit rewrite",
+      "confidence": "high"
+    },
+    {
+      "name": "GitHub CLI",
+      "repository": "https://github.com/cli/cli",
+      "category": "platform-tool",
+      "relationship": "Maintainer CLI used for repository identity, rename, publication metadata, and CI readback; not required for offline setup.",
+      "license": "MIT",
+      "accessed": "2026-09-08",
+      "evidence": "Installed gh command help, canonical publication checklist, and upstream LICENSE",
+      "confidence": "high"
+    },
     {
       "name": "Anthropic Claude Code",
       "repository": "https://github.com/anthropics/claude-code",
@@ -23,6 +104,27 @@
       "accessed": "2026-08-23",
       "evidence": "Historical agent playbook and current setup",
       "confidence": "high"
+    },
+    {
+      "name": "Agent Skills",
+      "repository": "https://github.com/agentskills/agentskills",
+      "category": "agent-workflow",
+      "relationship": "Portable skill format adopted for the canonical project skill templates.",
+      "license": "Apache-2.0 for code and specification; CC-BY-4.0 for documentation",
+      "accessed": "2026-09-04",
+      "evidence": "Public specification, examples, and repository license files",
+      "confidence": "high"
+    },
+    {
+      "name": "Intermediate coding-agent setup kit",
+      "repository": "https://github.com/HomenShum/coding-agent-setup",
+      "category": "agent-workflow",
+      "relationship": "Same-owner intermediate publication whose three-host kit history is integrated into the original canonical repository.",
+      "license": "MIT",
+      "accessed": "2026-09-08",
+      "evidence": "Public main tree, full commit graph and unchanged LICENSE",
+      "confidence": "high",
+      "revision": "1f509066d43cae797ce8e7778f12ec01e0d22387"
     },
     {
       "name": "OpenAI Plugins",
@@ -90,6 +192,17 @@
       "confidence": "high"
     },
     {
+      "name": "nopus",
+      "repository": "https://github.com/Vistyy/nopus",
+      "category": "agent-workflow",
+      "relationship": "Historical deterministic prose-quality plugin named in the supplied setup inventory; cited as prior tooling, not bundled or activated by this kit.",
+      "license": "MIT",
+      "accessed": "2026-09-04",
+      "evidence": "Supplied setup inventory plus current upstream README and LICENSE",
+      "confidence": "high",
+      "notes": "scripts/check_claim_language.py is an independently authored, narrower receipt-proximity check; it was not copied or adapted from nopus."
+    },
+    {
       "name": "Context7",
       "repository": "https://github.com/upstash/context7",
       "category": "agent-workflow",
@@ -115,11 +228,11 @@
       "repository": "https://github.com/assistant-ui/skills",
       "category": "agent-workflow",
       "relationship": "Source of 13 assistant-ui skills recorded by path and content hash in a historical skills lockfile.",
-      "license": "NOASSERTION (no repository license detected)",
-      "accessed": "2026-08-23",
+      "license": "MIT",
+      "accessed": "2026-09-04",
       "evidence": "Historical skills-lock.json with 13 SHA-256 content hashes",
       "confidence": "high",
-      "notes": "Citation does not grant permission to copy or redistribute these skills."
+      "notes": "Current upstream declares MIT. Citation still does not grant permission to copy an unreviewed historical snapshot without checking its revision."
     },
     {
       "name": "Anthropic skills",
@@ -151,6 +264,16 @@
       "license": "MIT",
       "accessed": "2026-08-23",
       "evidence": "Historical nodekit contract and promotion goal",
+      "confidence": "high"
+    },
+    {
+      "name": "Langfuse",
+      "repository": "https://github.com/langfuse/langfuse",
+      "category": "agent-workflow",
+      "relationship": "Recommended self-hosted tracing and evaluation backend subject to deployment-profile review; not bundled.",
+      "license": "MIT except enterprise directories",
+      "accessed": "2026-09-05",
+      "evidence": "Primary repository license and self-hosting documentation",
       "confidence": "high"
     },
     {
@@ -391,6 +514,17 @@
       "accessed": "2026-08-23",
       "evidence": "Public setup-kit validation workflow",
       "revision": "5fda3b95a4ea91299a34e894583c3862153e4b97 (v7.0.0)",
+      "confidence": "high"
+    },
+    {
+      "name": "Claude Code Action",
+      "repository": "https://github.com/anthropics/claude-code-action",
+      "category": "ci-audit-media",
+      "relationship": "GitHub Action used by a historical self-healing gate workflow for automated review and repair.",
+      "license": "MIT",
+      "accessed": "2026-09-04",
+      "evidence": "Sanitized historical GitHub Actions use declaration plus current upstream README and LICENSE",
+      "revision": "v1 tag reference; historical workflow did not pin a commit",
       "confidence": "high"
     },
     {
@@ -793,6 +927,16 @@
       "license": "Apache-2.0",
       "accessed": "2026-08-23",
       "evidence": "Historical frontend manifest and lockfile",
+      "confidence": "high"
+    },
+    {
+      "name": "React Flow / xyflow",
+      "repository": "https://github.com/xyflow/xyflow",
+      "category": "frontend",
+      "relationship": "Recommended interactive graph UI for the fresh application proof; not a kit runtime dependency.",
+      "license": "MIT",
+      "accessed": "2026-09-05",
+      "evidence": "Primary repository and React Flow integration documentation",
       "confidence": "high"
     },
     {

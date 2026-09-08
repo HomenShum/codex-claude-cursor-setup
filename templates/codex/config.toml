@@ -12,8 +12,8 @@ ignore_default_excludes = false
 
 # Disabled examples: enable only after reviewing the named server.
 [mcp_servers.example_local]
-command = "python"
-args = ["-m", "example_mcp_server"]
+command = "[PYTHON_EXECUTABLE]"
+args = ["-m", "[INSTALLED_MCP_MODULE]"]
 env_vars = ["EXAMPLE_API_KEY"]
 enabled = false
 startup_timeout_sec = 10
