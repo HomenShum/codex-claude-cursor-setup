@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "accessed": "2026-09-08",
+  "accessed": "2026-09-12",
   "scope": "Bounded direct-source corpus reconstructed through 2026-09-04 from the supplied setup inventory, sanitized direct dependency and container declarations, local extension records, current kit configuration, and primary public repositories. Historical application code and prose, private repositories, and transitive packages are excluded.",
   "methodology": {
     "current_kit_direct": [
@@ -471,7 +471,29 @@
       "confidence": "high",
       "notes": "Exact installed revision was not pinned."
     },
-
+    {
+      "name": "Agent Flow",
+      "repository": "https://github.com/patoles/agent-flow",
+      "category": "agent-workflow",
+      "relationship": "Optional unchanged browser UI for an explicit outcome-ledger metadata adapter; no upstream relay, installer or hooks are run.",
+      "license": "Apache-2.0",
+      "accessed": "2026-09-12",
+      "evidence": "Pinned LICENSE, bridge-types.ts and locally reproduced generated asset hashes",
+      "confidence": "high",
+      "revision": "84cd2fb8c704cefe52e6dd41a375c4069442e206",
+      "notes": "Assets are built locally and are not redistributed in this kit. The adapter requires exact reviewed JavaScript and CSS hashes."
+    },
+    {
+      "name": "Diagram Design",
+      "repository": "https://github.com/cathrynlavery/diagram-design",
+      "category": "agent-workflow",
+      "relationship": "Diagram authoring toolkit used for the static observable-learning architecture map; not a runtime dependency.",
+      "license": "MIT",
+      "accessed": "2026-09-12",
+      "evidence": "Installed skill license declaration, architecture template and self-check; current upstream repository license.",
+      "confidence": "high",
+      "notes": "Installed plain-copy revision was not preserved. No claim of an exact installed upstream commit. The map contains only generic setup-kit behavior."
+    },
     {
       "name": "uv",
       "repository": "https://github.com/astral-sh/uv",
@@ -726,7 +748,6 @@
       "confidence": "low",
       "notes": "Repository is archived. The exact Piper implementation and voice-model license remain unresolved."
     },
-
     {
       "name": "FastAPI",
       "repository": "https://github.com/fastapi/fastapi",
@@ -918,7 +939,6 @@
       "evidence": "Historical Python build-system declaration and lockfile",
       "confidence": "high"
     },
-
     {
       "name": "Vercel AI SDK",
       "repository": "https://github.com/vercel/ai",
@@ -1140,7 +1160,6 @@
       "evidence": "Historical frontend development manifest and CI",
       "confidence": "high"
     },
-
     {
       "name": "pgvector",
       "repository": "https://github.com/pgvector/pgvector",
@@ -1216,7 +1235,6 @@
       "revision": "22-bookworm-slim",
       "confidence": "high"
     },
-
     {
       "name": "Prime Agent",
       "repository": "https://github.com/PrimeIntellect-ai/prime-agent",

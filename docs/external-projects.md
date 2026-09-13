@@ -1,6 +1,6 @@
 # External projects
 
-<!-- external-projects-json-sha256: 34df304d1bf81b35f11aca43e07ef64a15824bb6dfbeb26465388dabf59b3c78 -->
+<!-- external-projects-json-sha256: 0016735a4111622747215e9aef521b144a73d3d73349b5e7599fcb78d734f4e6 -->
 
 This is the human-readable view of the machine ledger in [`sources/external-projects.json`](../sources/external-projects.json). It is a bounded corpus reconstructed through 2026-09-04 from the supplied setup inventory, current kit files, sanitized direct dependency and container declarations, local extension records, and historical research notes. It deliberately excludes transitive packages, private repository identities, and historical application code or prose.
 
@@ -85,6 +85,8 @@ Agents, official marketplaces, MCP servers, installed skills, and review or proo
 | [Serena](https://github.com/oraios/serena) | Directly observed local Codex MCP server for symbol-level code retrieval, editing, and refactoring. | MIT | 2026-08-23 | Evidence: Local Codex MCP configuration<br>Notes: Exact installed revision was not pinned. |
 | [Convex Backend](https://github.com/get-convex/convex-backend) | Canonical source behind the directly observed Convex CLI MCP integration. | NOASSERTION (repository uses a custom or multi-part LICENSE.md; review the exact component and revision) | 2026-08-23 | Evidence: Local Codex MCP configuration<br>Notes: Exact installed CLI revision was not pinned. |
 | [GitHub MCP Server](https://github.com/github/github-mcp-server) | Directly observed local Codex MCP server for bounded GitHub repository and pull-request operations. | MIT | 2026-08-23 | Evidence: Local Codex MCP configuration<br>Notes: Exact installed revision was not pinned. |
+| [Agent Flow](https://github.com/patoles/agent-flow) | Optional unchanged browser UI for an explicit outcome-ledger metadata adapter; no upstream relay, installer or hooks are run. | Apache-2.0 | 2026-09-12 | Evidence: Pinned LICENSE, bridge-types.ts and locally reproduced generated asset hashes<br>Revision: 84cd2fb8c704cefe52e6dd41a375c4069442e206<br>Notes: Assets are built locally and are not redistributed in this kit. The adapter requires exact reviewed JavaScript and CSS hashes. |
+| [Diagram Design](https://github.com/cathrynlavery/diagram-design) | Diagram authoring toolkit used for the static observable-learning architecture map; not a runtime dependency. | MIT | 2026-09-12 | Evidence: Installed skill license declaration, architecture template and self-check; current upstream repository license.<br>Notes: Installed plain-copy revision was not preserved. No claim of an exact installed upstream commit. The map contains only generic setup-kit behavior. |
 
 ## CI, audit, and media sources
 

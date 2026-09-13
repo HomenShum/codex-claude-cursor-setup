@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "revision": "84cd2fb8c704cefe52e6dd41a375c4069442e206",
+  "tracked_status": "",
+  "node": "v22.22.2",
+  "pnpm": "11.19.0",
+  "lock_sha256": "d5115f79ff9b073e1f88e957a49270238235c7729eb89b13f1ef2465c513596d",
+  "commands": [
+    {
+      "argv": "pnpm install --frozen-lockfile --ignore-scripts",
+      "exit_code": 0
+    },
+    {
+      "argv": "pnpm run build:app",
+      "exit_code": 0
+    }
+  ],
+  "telemetry_environment": {
+    "AGENT_FLOW_TELEMETRY": "false",
+    "DO_NOT_TRACK": "1"
+  },
+  "assets": {
+    "/index.js": {
+      "sha256": "95eb7223db5c1d1dac41c076a05083c02cb0f696abc6973a22f88fad7c92718d",
+      "bytes": 363467,
+      "matches_reviewed_pin": true
+    },
+    "/index.css": {
+      "sha256": "0c9cd3e53923ce470272f577d87d406af19c5905c0857e5b2da21772cff15076",
+      "bytes": 24004,
+      "matches_reviewed_pin": true
+    }
+  },
+  "platform": "macOS arm64",
+  "source_scope": "Clean pinned upstream checkout; no generated UI assets distributed by this setup kit."
+}
