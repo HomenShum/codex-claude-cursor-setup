@@ -94,7 +94,13 @@ def validate_event(event):
 def history(path):
     if not path.exists():
         return []
-    raw = read_regular_file_bounded(path, 4_000_000)
+    return history_bytes(read_regular_file_bounded(path, 4_000_000))
+
+
+def history_bytes(raw):
+    """Validate exactly the captured bytes used by a source receipt."""
+    if not isinstance(raw, bytes) or len(raw) > 4_000_000:
+        raise ValueError("ledger byte cap exceeded or invalid byte input")
     if raw and not raw.endswith(b"\n"):
         raise ValueError("incomplete ledger tail; preserve for recovery")
     lines = raw.splitlines()

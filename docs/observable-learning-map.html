@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Two read-only review paths</title>
+<style>body{margin:0;padding:32px;background:#f9f9f9;color:#121212;font-family:Inter,Arial,sans-serif}main{max-width:1000px;margin:auto}h1{font-size:32px;font-weight:500}p{color:#4a4949;line-height:1.5}svg{display:block;width:100%;height:auto}a{color:#1d6ed7}</style>
+<main><h1>Two read-only review paths</h1><p>The existing host loop executes the work. These adapters inspect its saved evidence.</p>
+<svg viewBox="0 0 1000 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="observable-learning-map-title observable-learning-map-desc">
+<title id="observable-learning-map-title">Two read-only review paths</title>
+<desc id="observable-learning-map-desc">Saved runs pass through the existing comparator into a review report. One outcome ledger passes through a scoped metadata adapter into the pinned Agent Flow UI. Neither path activates a candidate.</desc>
+<defs>
+<marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#4a4949"/></marker>
+<marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#1d6ed7"/></marker>
+<marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#6a57ff"/></marker>
+</defs>
+<rect width="1000" height="480" fill="#f9f9f9"/>
+<path d="M 272 136 H 368" fill="none" stroke="#4a4949" stroke-width="1.2" marker-end="url(#arrow)"/>
+<path d="M 608 136 H 720" fill="none" stroke="#4a4949" stroke-width="1.2" marker-end="url(#arrow)"/>
+<path d="M 272 304 H 368" fill="none" stroke="#4a4949" stroke-width="1.2" marker-end="url(#arrow)"/>
+<path d="M 608 304 H 720" fill="none" stroke="#6a57ff" stroke-width="1.2" marker-end="url(#arrow-link)"/>
+<g font-family="Inter,Arial,sans-serif" fill="#121212">
+<rect x="32" y="80" width="240" height="112" rx="8" fill="#eceff2" stroke="#999999"/>
+<text x="48" y="112" font-size="20" font-weight="600">Saved runs + policy</text><text x="48" y="144" font-size="16" fill="#4a4949">Baseline and candidate</text><text x="48" y="168" font-size="16" fill="#4a4949">Explicit versioned inputs</text>
+<rect x="368" y="80" width="240" height="112" rx="8" fill="#edf3fc" stroke="#1d6ed7"/>
+<text x="384" y="112" font-size="20" font-weight="600">Existing comparator</text><text x="384" y="144" font-size="16" fill="#4a4949">Per-case gates and scores</text><text x="384" y="168" font-size="16" fill="#4a4949">Reject any score decrease</text>
+<rect x="720" y="80" width="240" height="112" rx="8" fill="white" stroke="#121212"/>
+<text x="736" y="112" font-size="20" font-weight="600">Learning review</text><text x="736" y="144" font-size="16" fill="#4a4949">JSON or offline HTML</text><text x="736" y="168" font-size="16" fill="#4a4949">Exact input hashes</text>
+<rect x="32" y="248" width="240" height="112" rx="8" fill="#eceff2" stroke="#999999"/>
+<text x="48" y="280" font-size="20" font-weight="600">One outcome ledger</text><text x="48" y="312" font-size="16" fill="#4a4949">Existing append protocol</text><text x="48" y="336" font-size="16" fill="#4a4949">Explicit file selection</text>
+<rect x="368" y="248" width="240" height="112" rx="8" fill="#edf3fc" stroke="#1d6ed7"/>
+<text x="384" y="280" font-size="20" font-weight="600">Metadata reader</text><text x="384" y="312" font-size="16" fill="#4a4949">Parse and hash same bytes</text><text x="384" y="336" font-size="16" fill="#4a4949">Preserve the prior prefix</text>
+<rect x="720" y="248" width="240" height="112" rx="8" fill="white" stroke="#121212"/>
+<text x="736" y="280" font-size="20" font-weight="600">Pinned Agent Flow UI</text><text x="736" y="312" font-size="16" fill="#4a4949">Loopback GET / SSE</text><text x="736" y="336" font-size="16" fill="#4a4949">Metadata and source receipt</text>
+<line x1="32" x2="968" y1="396" y2="396" stroke="#e0e0e0"/>
+<text x="32" y="428" font-size="16" font-weight="600">Human acceptance remains outside both paths. No scheduler or activation authority.</text>
+<text x="32" y="456" font-size="16" fill="#4a4949">Grey arrows: local data reads. Violet arrow: loopback browser stream.</text>
+</g></svg>
+<p>Static architecture map generated with the <a href="external-projects.md">diagram-design</a> toolkit. Offline font fallback: Arial when Inter is unavailable. <a href="observable-learning.md">Recipe and limits</a>.</p></main></html>

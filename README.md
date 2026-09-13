@@ -339,3 +339,7 @@ their content.
 Original documentation, templates, and validation code are available under
 the [MIT License](LICENSE). External projects remain under the licenses
 recorded in the attribution ledger.
+
+## Inspect a saved learning comparison
+
+Use the [observable learning recipe](docs/observable-learning.md) to inspect per-case baseline/candidate results and watch one explicit outcome ledger in a pinned Agent Flow UI. The runnable example is synthetic; it makes no model calls and grants no activation authority.
