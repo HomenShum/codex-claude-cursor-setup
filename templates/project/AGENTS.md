@@ -49,6 +49,14 @@ burst, and sustained-use paths in proportion to risk.
 - Document any new dependency, public API, configuration knob, or authority.
 - Verify user-visible changes in the running product at declared viewports.
 - Do not call a remote change published until its public content is observed.
+- Register each accepted request with its source, owner, scope and acceptance
+  in the outcome ledger before work. Preserve it across host switches.
+- Append decisions and before/after changes; corrections supersede earlier
+  decisions. Complete a request only against a current independent review.
+- Bind source-control evidence to the canonical repository and candidate SHA.
+  Re-check forge head, required checks and reviews before the existing merge
+  gate; later commits invalidate earlier revision claims. Preserve recovery
+  evidence with a corrective commit and verify the actual consumer afterward.
 
 ## Definition of done
 

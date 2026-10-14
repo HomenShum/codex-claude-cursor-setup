@@ -5,6 +5,10 @@ must rescore the same saved outputs, preserve the failed cases and ask the same
 reviewer; it must not start a new experiment with easier cases. One frozen
 outcome contract and append-only record carry that work between hosts.
 
+For multiple requests over a long session, follow [long-running goals](long-running-goals.md).
+Request, decision, baseline, change, review and completion events use this same
+ledger. They add traceability without starting a second execution engine.
+
 ## Declare before implementation
 
 Copy `templates/harness/outcome-contract.json` into the target's private working

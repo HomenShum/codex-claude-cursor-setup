@@ -1,0 +1,13 @@
+{
+  "type": "REQUEST_RECORDED",
+  "actor": "intake-owner",
+  "summary": "An analyst can stop a long-running task without later writes.",
+  "next_action": "Capture cancellation behavior before editing.",
+  "failed_gates": [],
+  "evidence": [],
+  "request_id": "agent-cancellation",
+  "source_ref": "requests/accepted-brief.md",
+  "owner": "agent-runtime-owner",
+  "scope": ["Task cancellation and recovery"],
+  "acceptance": ["No new stage or graph write after cancellation", "Completed results remain inspectable"]
+}

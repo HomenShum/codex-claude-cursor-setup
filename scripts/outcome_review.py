@@ -32,6 +32,8 @@ ROUTES = {
 MODES = {"DETERMINISTIC_RETRIEVAL", "AGENTIC_SEARCH", "WORKFLOW_CHAIN", "DURABLE_JOB", "SANDBOX_MULTI_TURN"}
 ENVELOPE_FIELDS = {"code", "model", "prompt", "tools", "retriever", "corpus", "dataset", "rubric", "runtime", "deployment_profile"}
 EVENTS = {"RUN_INITIALIZED", "BASELINE_CAPTURED", "CONTEXT_REFRESHED", "HYPOTHESIS_RECORDED", "CANDIDATE_CREATED", "GATE_FAILED", "GATE_PASSED", "REPAIR_APPLIED", "EVAL_COMPLETED", "REVIEW_REQUESTED", "REVIEW_RECORDED", "TARGET_AMENDED", "HOST_SWITCH", "CANDIDATE_REJECTED", "CANDIDATE_ELIGIBLE"}
+REQUEST_EVENTS = {"REQUEST_RECORDED", "DECISION_RECORDED", "CHANGE_RECORDED", "REQUEST_COMPLETED"}
+EVENTS |= REQUEST_EVENTS
 MAX_EVENTS = 500
 
 
@@ -89,6 +91,99 @@ def validate_event(event):
         raise ValueError("failed event needs failed gate IDs")
     if event["type"] == "GATE_PASSED" and (not event["failed_gates"] or not event["evidence"]):
         raise ValueError("passing event needs gate IDs and replayable evidence references")
+    kind = event["type"]
+    if kind not in REQUEST_EVENTS and "request_id" not in event:
+        return
+    if not wording(event.get("request_id")) or kind not in REQUEST_EVENTS | {"BASELINE_CAPTURED", "REVIEW_RECORDED"}:
+        raise ValueError("invalid request event binding")
+    if kind == "REQUEST_RECORDED":
+        for field in ("source_ref", "owner"):
+            if not wording(event.get(field)):
+                raise ValueError(f"request requires {field}")
+        for field in ("scope", "acceptance"):
+            strings(event.get(field), field)
+    elif kind == "DECISION_RECORDED":
+        for field in ("decision_id", "before", "after"):
+            if not wording(event.get(field)):
+                raise ValueError(f"decision requires {field}")
+        if "supersedes" not in event or (event["supersedes"] is not None and not wording(event["supersedes"])):
+            raise ValueError("decision supersedes must be null or an existing decision ID")
+        strings(event["evidence"], "decision evidence")
+    elif kind == "CHANGE_RECORDED":
+        if not wording(event.get("change_id")) or not wording(event.get("before")):
+            raise ValueError("change requires ID and baseline record SHA")
+        if len(encoded(event["change_id"])) > 64:
+            raise ValueError("encoded change ID must fit 64 bytes so a full review fits the event cap")
+        after = event.get("after")
+        if not isinstance(after, dict) or set(after) != {"summary", "evidence"} or not wording(after["summary"]):
+            raise ValueError("change requires after summary and evidence")
+        strings(after["evidence"], "after evidence")
+    elif kind == "BASELINE_CAPTURED":
+        strings(event["evidence"], "baseline evidence")
+    elif kind == "REVIEW_RECORDED":
+        strings(event.get("change_ids"), "reviewed change IDs", maximum=MAX_EVENTS)
+        strings(event["evidence"], "review evidence")
+        if event.get("verdict") not in {"PASS", "REVISE"}:
+            raise ValueError("request review requires PASS or REVISE")
+    elif not wording(event.get("review_sha256")):
+        raise ValueError("completion requires review record SHA")
+
+
+def request_state(records):
+    """Replay bounded references, not a second persisted queue or execution engine."""
+    requests, decisions, baselines, changes, reviews, failures = {}, {}, {}, {}, {}, set()
+    for record in records[1:]:
+        event = record["body"]["event"]
+        validate_event(event)
+        kind = event["type"]
+        if kind == "GATE_PASSED":
+            failures.difference_update(event["failed_gates"])
+        else:
+            failures.update(event["failed_gates"])
+        if "request_id" not in event:
+            continue
+        request_id = event["request_id"]
+        if kind == "REQUEST_RECORDED":
+            if request_id in requests:
+                raise ValueError("duplicate request ID")
+            requests[request_id] = {"request": event, "changes": [], "review": None, "completed": False}
+            continue
+        if request_id not in requests:
+            raise ValueError("unknown request ID")
+        state = requests[request_id]
+        if state["completed"]:
+            raise ValueError("completed requests are immutable; register a linked follow-up")
+        if kind == "BASELINE_CAPTURED":
+            baselines[record["sha256"]] = request_id
+        elif kind == "DECISION_RECORDED":
+            key, previous = event["decision_id"], event["supersedes"]
+            if key in decisions or (previous is not None and decisions.get(previous) != request_id):
+                raise ValueError("duplicate decision or unknown/wrong-request supersedes ID")
+            decisions[key] = request_id
+        elif kind == "CHANGE_RECORDED":
+            key = event["change_id"]
+            if key in changes or baselines.get(event["before"]) != request_id:
+                raise ValueError("duplicate change or unknown/wrong-request baseline")
+            changes[key] = event
+            state["changes"].append(key)
+        elif kind == "REVIEW_RECORDED":
+            if not state["changes"] or set(event["change_ids"]) != set(state["changes"]):
+                raise ValueError("review must cover all current request changes")
+            authors = {changes[key]["actor"] for key in state["changes"]} | {state["request"]["owner"]}
+            if event["actor"] in authors:
+                raise ValueError("request review must assert an independent actor")
+            reviews[record["sha256"]] = event
+            state["review"] = record["sha256"]
+        elif kind == "REQUEST_COMPLETED":
+            review = reviews.get(event["review_sha256"])
+            if review is None or state["review"] != event["review_sha256"] or review["verdict"] != "PASS":
+                raise ValueError("completion requires a current passing review")
+            if failures:
+                raise ValueError("unresolved gates prevent request completion")
+            state["completed"] = True
+        if kind in {"BASELINE_CAPTURED", "DECISION_RECORDED", "CHANGE_RECORDED"}:
+            state["review"] = None
+    return requests
 
 
 def history(path):
@@ -116,6 +211,7 @@ def history(path):
             raise ValueError("contract hash mismatch")
         records.append(record)
         previous = record["sha256"]
+    request_state(records)
     return records
 
 
@@ -146,6 +242,7 @@ def append(path, *, contract=None, event=None, expected_head=None):
             body = {"event": event, "contract_sha256": records[0]["body"]["contract_sha256"]}
         body.update(sequence=len(records), previous=records[-1]["sha256"] if records else "0" * 64, recorded_at=datetime.now(timezone.utc).isoformat())
         record = {"body": body, "sha256": digest(body)}
+        request_state([*records, record])
         content = encoded(record) + b"\n"
         if len(content) > 64000 or (path.stat().st_size if path.exists() else 0) + len(content) > 4_000_000:
             raise ValueError("bounded ledger size exceeded")
@@ -174,6 +271,22 @@ def review(records):
         else:
             failures.update(event["failed_gates"])
         lines.extend([f"{record['body']['sequence']} {event['type']}: {event['summary']}", f"  Evidence: {', '.join(event['evidence']) or 'UNAVAILABLE'}", f"  Next: {event['next_action']}"])
+        if "request_id" in event:
+            lines.extend([f"  Request: {event['request_id']}; actor: {event['actor']}", f"  Record: {record['sha256']}"])
+        if event["type"] == "DECISION_RECORDED":
+            lines.extend([f"  Decision {event['decision_id']} supersedes {event['supersedes'] or 'none'}", f"  Before: {event['before']}", f"  After: {event['after']}"])
+        elif event["type"] == "CHANGE_RECORDED":
+            lines.extend([f"  Change {event['change_id']} before record: {event['before']}", f"  After: {event['after']['summary']}", f"  After evidence: {', '.join(event['after']['evidence'])}"])
+        elif event["type"] == "REVIEW_RECORDED" and "request_id" in event:
+            lines.append(f"  Verdict: {event['verdict']}; reviewed changes: {', '.join(event['change_ids'])}")
+        elif event["type"] == "REQUEST_COMPLETED":
+            lines.append(f"  Accepted review record: {event['review_sha256']}")
+    for request_id, state in request_state(records).items():
+        request = state["request"]
+        lines.extend([f"Request {request_id}: {'COMPLETION_RECORDED' if state['completed'] else 'OPEN'}; owner: {request['owner']}",
+                      f"  Source: {request['source_ref']}", f"  Scope: {', '.join(request['scope'])}",
+                      f"  Acceptance: {'; '.join(request['acceptance'])}"])
+        lines.append(f"  Current review: {state['review'] or 'UNAVAILABLE'}")
     lines.extend([f"Open failures: {', '.join(sorted(failures)) or 'none recorded (not proof of success)'}", "Activation: NOT AUTHORIZED by this local record", f"Head: {records[-1]['sha256']}"])
     return "\n".join(lines) + "\n"
 
