@@ -53,6 +53,7 @@ ALLOWED_EXTERNAL_HOSTS = frozenset(
         "chatgpt.com",
         "releases.openai.com",
         "code.claude.com",
+        "www.anthropic.com",
         "claude.ai",
         "downloads.claude.ai",
         "cursor.com",
@@ -62,7 +63,7 @@ ALLOWED_EXTERNAL_HOSTS = frozenset(
 )
 OFFICIAL_VENDOR_HOSTS = {
     "OpenAI": frozenset({"learn.chatgpt.com", "chatgpt.com", "releases.openai.com"}),
-    "Anthropic": frozenset({"code.claude.com", "claude.ai", "downloads.claude.ai"}),
+    "Anthropic": frozenset({"code.claude.com", "www.anthropic.com", "claude.ai", "downloads.claude.ai"}),
     "Cursor": frozenset({"cursor.com", "forum.cursor.com"}),
     "Graphite": frozenset({"graphite.com"}),
     "GitHub": frozenset({"docs.github.com"}),
@@ -193,7 +194,7 @@ GITHUB_URL = re.compile(
 )
 VENDOR_DOC_URL = re.compile(
     r"https://(?:learn\.chatgpt\.com|chatgpt\.com|releases\.openai\.com|"
-    r"code\.claude\.com|claude\.ai|downloads\.claude\.ai|cursor\.com|forum\.cursor\.com|graphite\.com|docs\.github\.com|git-scm\.com)/"
+    r"code\.claude\.com|www\.anthropic\.com|claude\.ai|downloads\.claude\.ai|cursor\.com|forum\.cursor\.com|graphite\.com|docs\.github\.com|git-scm\.com)/"
     r"[^\s)>\]\"'`]+",
     re.I,
 )

@@ -2,6 +2,11 @@
   "accessed": "2026-09-04",
   "sources": [
     {
+      "vendor": "Anthropic",
+      "topic": "Redesigning source control; published 2026-10-13, accessed 2026-10-14; applied guidance, not host configuration",
+      "url": "https://www.anthropic.com/engineering/redesigning-source-control"
+    },
+    {
       "vendor": "OpenAI",
       "topic": "Codex CLI installation and use",
       "url": "https://learn.chatgpt.com/docs/codex/cli"

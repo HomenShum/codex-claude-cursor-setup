@@ -26,6 +26,24 @@ import path_safety  # noqa: E402
 
 
 class ValidatorAdversarialScenarios(unittest.TestCase):
+    def test_publisher_can_cite_anthropic_engineering_without_trusting_lookalikes(self) -> None:
+        """A maintainer records a primary article; spoofed hosts and private DNS stay rejected."""
+        article = "https://" + "www.anthropic.com/engineering/redesigning-source-control"
+        self.assertEqual(validate_repo.normalize_doc_url(article), article)
+        self.assertEqual(validate_repo.VENDOR_DOC_URL.findall(article), [article])
+        self.assertIn("www.anthropic.com", validate_repo.OFFICIAL_VENDOR_HOSTS["Anthropic"])
+        with mock.patch.object(validate_repo.socket, "getaddrinfo", return_value=[
+            (2, 1, 6, "", ("93.184.216.34", 443))
+        ]):
+            validate_repo.validate_public_destination(article)
+            for hostname in ("www.anthropic.com.example.org", "example.org", "127.0.0.1"):
+                with self.subTest(hostname=hostname), self.assertRaises(ValueError):
+                    validate_repo.validate_public_destination("https://" + hostname + "/article")
+        with mock.patch.object(validate_repo.socket, "getaddrinfo", return_value=[
+            (2, 1, 6, "", ("127.0.0.1", 443))
+        ]), self.assertRaises(ValueError):
+            validate_repo.validate_public_destination(article)
+
     def copy_repository(self) -> tuple[tempfile.TemporaryDirectory[str], Path]:
         temporary = tempfile.TemporaryDirectory(dir=TEMP_ROOT)
         target = Path(temporary.name) / "repo"

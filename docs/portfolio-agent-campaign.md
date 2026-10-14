@@ -19,6 +19,7 @@ Actual run evidence and private request sources remain in target-owned storage.
 | C01 | Sync locally and coordinate with Claude Code and Codex. | Codex + Claude | Recorded scope/branch ownership, handoff receipt, acknowledgement from the receiving host and preserved open failures. A written note alone is not two-way acknowledgement. |
 | C02 | Add long-running closed-loop goals covering every request and later ask. | Codex | Request IDs survive host switches; bounded attempts, next action and stop conditions persist; authorized host-native continuation resumes the same record. |
 | C03 | Put append-only decisions and before/after change logs in the cross-host setup repo. | Codex | Reusable validated events, scenario tests, linked before/after evidence and current independent review before a request completion record. |
+| C04 | Apply Anthropic's latest article on redesigning source control. | Codex | Verified primary source, revision-bound handoffs, authoritative status queries and recovery rules applied within Git/GitHub while retaining current merge gates. |
 
 The established scope is 19 project repositories plus the profile and portfolio
 site: NodeKit, NodeAgent, NodeRoom, NodeSlide, parity-studio, NodeVideo, NodeVoice,
@@ -42,6 +43,7 @@ model retirement dates must be rechecked with the provider before scheduling.
 | D001 / 2026-10-14 | P01, A01, C01 | Visual work and agent behavior shared an ambiguous implementation owner. | Claude owns prettiness; Codex owns in-app agent experience. Model-refresh branches keep their current owners. | Accepted owner steering, paraphrased in this register. Receiving-host acknowledgement is separate. |
 | D002 / 2026-10-14 | A02, A03, C02, C03 | Generic outcome events lacked request identity and before/after completion linkage. | Extend the existing outcome ledger and learning comparator; use the host's scheduler. | Existing scripts and the linked long-running-goal protocol. No new execution engine or installed framework. |
 | D003 / 2026-10-14 | A01, A04 | A direct adapter probe observed graph writes and next-stage progress after cancellation between completed tools. | Use that same cancellation scenario as the first narrow in-app repair and regression seed. | Local offline reproduction; exact browser timing and repair remain unverified in this register. |
+| D004 / 2026-10-14 | C04, C01, C03 | A handoff could name a working-tree digest without the repository, candidate or reviewed revision. | Bind source-control receipts to repository/base/head/review identities; query authoritative status; recover with corrective commits. Preserve existing Git/GitHub and merge gates. | [Source and applied protocol](long-running-goals.md#bind-source-control-evidence-to-the-revision). Guidance is distinct from automatic enforcement; no Scion migration or portfolio speedup claimed. |
 
 ## Framework candidates
 

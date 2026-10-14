@@ -12,3 +12,9 @@
 ### Verification checkpoint — 2026-10-14
 
 - Repository scenario suite passed, including additive setup materialization, missing/conflicting destinations, stale plans and competing writers. Offline template/link validation passed. Existing host configurations and credentials remain unchanged.
+
+### Source-control steering — 2026-10-14
+
+- Before: Working-tree digest and request records did not identify the reviewed Git revision or authoritative publication status.
+- After: Handoffs retain repository identity, owned paths, base/head SHAs, test/review bindings, observed forge state and recovery identity. Project guidance requires rechecking the current revision at the existing merge gate.
+- Limit: These fields guide the operator; they do not install branch protection, authenticate review or activate a merge service.

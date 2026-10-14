@@ -13,3 +13,10 @@
 
 - Offline repository validation and all 196 bounded external URL checks passed. The seven-layer preflight and 30 mutation scenarios passed (one platform skip).
 - The source checkout's full-history scan found an object reachable only through a private local archive/stash, absent from both advertised remote branches. A full fresh public clone is used for publication-history proof; no local history or privacy rule was altered.
+
+### Source-control steering — 2026-10-14
+
+- Request C04: apply Anthropic's latest source-control article, verified as the October 13 engineering post.
+- Before: Handoffs and proof guidance lacked explicit repository/base/head/review bindings.
+- After: The long-running protocol requires revision-bound evidence, authoritative forge status, owned worktrees, preserved merge gates and corrective-commit recovery; the source catalog records the dated article.
+- Scope: Portable Git/GitHub guidance. No custom VCS, relaxed pre-merge policy or claimed performance improvement.

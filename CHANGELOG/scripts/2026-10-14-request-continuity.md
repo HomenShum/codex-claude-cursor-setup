@@ -15,3 +15,9 @@
 - After: Canonical encoded change IDs are capped at 64 bytes; request/actor/record hashes, verdicts, covered changes and current/accepted review references are rendered explicitly.
 - Verification: 12 outcome scenarios pass, including 101 changes, oversized Unicode/ASCII IDs, append and rehashed replay, competing writers and sustained history. The repository suite passed 231 scenarios with three platform skips before the final targeted additions; all final additions passed in the targeted run. Independent Codex code review and simplification both APPROVED the final script snapshot.
 - Reliability: collections derive from at most 500 records; reads/events retain existing byte caps; malformed state is NO_GATE; canonical sorted-key hashing is retained. No network route, external fetch, score calculation or async backend was added. Wall-clock execution remains the runner's responsibility.
+
+### Source-control primary-source validation — 2026-10-14
+
+- Before: The official-source validator recognized Claude product documentation but rejected Anthropic's engineering site.
+- After: Add only the exact `www.anthropic.com` host to the existing catalog/fetch policy and citation detector. Existing redirect, public-address, body-size and time limits remain.
+- Proof: The publisher scenario rejects the real article before the allowlist change; it also checks lookalike hosts and a private-address DNS response. No wildcard domain trust or new fetch path.

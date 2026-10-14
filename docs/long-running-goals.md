@@ -99,6 +99,54 @@ carried open requests, failed gates, approvals and consumed attempts. Never
 rotate by dropping failures or granting a fresh retry budget. This transfer is
 a reviewed operator action, not an automatic capability of the current tool.
 
+## Bind source-control evidence to the revision
+
+A maintainer receives a passing review from another host, but a worker has
+since pushed a fix. Merging by branch name can accept code nobody reviewed.
+Keep the repository identity and immutable candidate revision beside the proof
+(revision-bound receipts). A handoff must identify exactly what was checked
+and what remains authorized to land.
+
+[Anthropic's source-control article](https://www.anthropic.com/engineering/redesigning-source-control),
+published 2026-10-13 and read 2026-10-14, describes immutable content and
+server-side queries, warns against inferring merge status by scanning history,
+and emphasizes preserving system constraints during agent work. Its Scion
+architecture addresses an unusual monorepo scale. The following is this kit's
+Git/GitHub application of those lessons, not a Scion implementation:
+
+1. Before edits, record the canonical repository identity, base SHA, branch,
+   request IDs and owned paths in the [handoff](../templates/project/HANDOFF.md).
+   Use an isolated worktree for concurrent edits. Inspect active owners before
+   taking a path; preserve dirty work. A local ownership note is coordination,
+   not an exclusive lock or authorization enforcement.
+2. Commit the candidate and bind test logs, before/after artifacts and review
+   evidence to its head SHA. Uncommitted work needs an explicit diff digest
+   and cannot claim review of a committed revision. Evidence references in
+   the ledger identify these receipts; this tool does not inspect Git or
+   authenticate the review. The reviewer must check those bindings.
+3. Query the forge's PR, check and deployment records for current status. Read
+   immutable file versions by SHA when that answers the question; materialize
+   a checkout when execution or history proof needs it. A shallow checkout
+   cannot satisfy a full-history gate. Record unavailable metadata as unknown.
+4. Immediately before landing, re-read the target repository, PR head, required
+   check revisions and required review revisions. A new commit, conflict repair
+   or changed tested merge result requires refreshed applicable evidence. Use
+   the existing merge helper and server-side branch rules. Stale or unverifiable
+   evidence stops landing; this guidance does not add an automated merge gate.
+5. Verify the resulting remote revision and real consumer surface after landing.
+   Keep candidate, reviewed, merged, deployed and live-verified states distinct.
+   Post-merge checks supplement the existing pre-merge gates. Record rollback
+   identity and recovery as a new corrective commit; retain failed evidence.
+6. Let the existing bounded loop observe only its owned component's receipts,
+   failures and latency/cost evidence. Notify on meaningful changes. Do not add
+   a monitor fleet, custom VCS, global queue or broader permissions without an
+   observed need and a separately scoped request.
+
+These are portable operator rules. Branch protection, reviewed merge helpers
+and host permissions remain the enforcement mechanisms; a copied template
+cannot configure them. Do not claim Anthropic's performance results for this
+portfolio or remove its existing independent-review and green-CI requirements.
+
 ## Improve the harness without teaching it the answer
 
 Start with the app's existing runtime and [learning comparison](../templates/learning/README.md).

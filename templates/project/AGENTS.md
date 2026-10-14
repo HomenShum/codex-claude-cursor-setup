@@ -53,6 +53,10 @@ burst, and sustained-use paths in proportion to risk.
   in the outcome ledger before work. Preserve it across host switches.
 - Append decisions and before/after changes; corrections supersede earlier
   decisions. Complete a request only against a current independent review.
+- Bind source-control evidence to the canonical repository and candidate SHA.
+  Re-check forge head, required checks and reviews before the existing merge
+  gate; later commits invalidate earlier revision claims. Preserve recovery
+  evidence with a corrective commit and verify the actual consumer afterward.
 
 ## Definition of done
 
