@@ -1,6 +1,6 @@
 # External projects
 
-<!-- external-projects-json-sha256: 34df304d1bf81b35f11aca43e07ef64a15824bb6dfbeb26465388dabf59b3c78 -->
+<!-- external-projects-json-sha256: e64fbefcf2fd59c38d78a4a1d11912b015e716d2f9ef09f7e926a5fc881afc98 -->
 
 This is the human-readable view of the machine ledger in [`sources/external-projects.json`](../sources/external-projects.json). It is a bounded corpus reconstructed through 2026-09-04 from the supplied setup inventory, current kit files, sanitized direct dependency and container declarations, local extension records, and historical research notes. It deliberately excludes transitive packages, private repository identities, and historical application code or prose.
 
@@ -204,6 +204,12 @@ Projects explicitly evaluated, compared, rejected, or corrected during research.
 | [Deep Agents](https://github.com/langchain-ai/deepagents) | Research-only agent-harness comparison; not installed or shipped. | MIT | 2026-08-23 | Evidence: Historical agent architecture research |
 | [Kuzu](https://github.com/kuzudb/kuzu) | Evaluated and rejected graph-database option; not a runtime dependency. | MIT | 2026-08-23 | Evidence: Historical graph storage comparison<br>Notes: Repository was archived when rechecked. |
 | [HyperAgent (FSoft-AI4Code)](https://github.com/FSoft-AI4Code/HyperAgent) | Historical name-collision false lead; rejected after identifying Meta's HyperAgents as the intended source. | Apache-2.0 | 2026-08-23 | Evidence: Historical canonical-source correction |
+
+| [GEPA](https://github.com/gepa-ai/gepa) | Released optimizer candidate for prompt/tool-policy comparisons with bounded evaluator calls. Not installed, vendored or shipped. | MIT | 2026-10-14 | Evidence: Primary upstream README, release/license materials and linked paper reviewed on 2026-10-14.<br>Notes: Portfolio performance and native Windows installation are unmeasured; pin and audit before adoption. |
+| [RRSI](https://github.com/google-research/rrsi) | Released recursive harness research candidate; code edits remain isolated from evaluator and holdout. Not installed, vendored or shipped. | Apache-2.0 | 2026-10-14 | Evidence: Primary upstream README, release/license materials and linked paper reviewed on 2026-10-14.<br>Notes: Portfolio performance and native Windows installation are unmeasured; pin and audit before adoption. |
+| [JIT-Agent](https://github.com/bingreeky/JIT) | Task-specific executable harness research candidate, not a replacement runtime adopted by this kit. Not installed, vendored or shipped. | MIT for runtime; Apache-2.0 checkpoint; upstream dataset terms separate | 2026-10-14 | Evidence: Primary upstream README, release/license materials and linked paper reviewed on 2026-10-14.<br>Notes: Portfolio performance and native Windows installation are unmeasured; pin and audit before adoption. |
+| [AutoDesign](https://github.com/Yaxin9Luo/AutoDesign) | Artifact/design-agent research candidate; no general reliability claim. Not installed, vendored or shipped. | MIT for code; third-party assets separate | 2026-10-14 | Evidence: Primary upstream README, release/license materials and linked paper reviewed on 2026-10-14.<br>Notes: Portfolio performance and native Windows installation are unmeasured; pin and audit before adoption. |
+| [NeMo Data Designer](https://github.com/NVIDIA-NeMo/DataDesigner) | Synthetic-input research candidate; generated labels require independent validation. Not installed, vendored or shipped. | Apache-2.0 | 2026-10-14 | Evidence: Primary upstream README, release/license materials and linked paper reviewed on 2026-10-14.<br>Notes: Portfolio performance and native Windows installation are unmeasured; pin and audit before adoption. |
 
 ## Publication boundary
 

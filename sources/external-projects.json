@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "accessed": "2026-09-08",
+  "accessed": "2026-10-14",
   "scope": "Bounded direct-source corpus reconstructed through 2026-09-04 from the supplied setup inventory, sanitized direct dependency and container declarations, local extension records, current kit configuration, and primary public repositories. Historical application code and prose, private repositories, and transitive packages are excluded.",
   "methodology": {
     "current_kit_direct": [
@@ -1309,6 +1309,61 @@
       "accessed": "2026-08-23",
       "evidence": "Historical canonical-source correction",
       "confidence": "high"
+    },
+    {
+      "name": "GEPA",
+      "repository": "https://github.com/gepa-ai/gepa",
+      "category": "research-only-rejected",
+      "relationship": "Released optimizer candidate for prompt/tool-policy comparisons with bounded evaluator calls. Not installed, vendored or shipped.",
+      "license": "MIT",
+      "accessed": "2026-10-14",
+      "evidence": "Primary upstream README, release/license materials and linked paper reviewed on 2026-10-14.",
+      "confidence": "high",
+      "notes": "Portfolio performance and native Windows installation are unmeasured; pin and audit before adoption."
+    },
+    {
+      "name": "RRSI",
+      "repository": "https://github.com/google-research/rrsi",
+      "category": "research-only-rejected",
+      "relationship": "Released recursive harness research candidate; code edits remain isolated from evaluator and holdout. Not installed, vendored or shipped.",
+      "license": "Apache-2.0",
+      "accessed": "2026-10-14",
+      "evidence": "Primary upstream README, release/license materials and linked paper reviewed on 2026-10-14.",
+      "confidence": "high",
+      "notes": "Portfolio performance and native Windows installation are unmeasured; pin and audit before adoption."
+    },
+    {
+      "name": "JIT-Agent",
+      "repository": "https://github.com/bingreeky/JIT",
+      "category": "research-only-rejected",
+      "relationship": "Task-specific executable harness research candidate, not a replacement runtime adopted by this kit. Not installed, vendored or shipped.",
+      "license": "MIT for runtime; Apache-2.0 checkpoint; upstream dataset terms separate",
+      "accessed": "2026-10-14",
+      "evidence": "Primary upstream README, release/license materials and linked paper reviewed on 2026-10-14.",
+      "confidence": "high",
+      "notes": "Portfolio performance and native Windows installation are unmeasured; pin and audit before adoption."
+    },
+    {
+      "name": "AutoDesign",
+      "repository": "https://github.com/Yaxin9Luo/AutoDesign",
+      "category": "research-only-rejected",
+      "relationship": "Artifact/design-agent research candidate; no general reliability claim. Not installed, vendored or shipped.",
+      "license": "MIT for code; third-party assets separate",
+      "accessed": "2026-10-14",
+      "evidence": "Primary upstream README, release/license materials and linked paper reviewed on 2026-10-14.",
+      "confidence": "high",
+      "notes": "Portfolio performance and native Windows installation are unmeasured; pin and audit before adoption."
+    },
+    {
+      "name": "NeMo Data Designer",
+      "repository": "https://github.com/NVIDIA-NeMo/DataDesigner",
+      "category": "research-only-rejected",
+      "relationship": "Synthetic-input research candidate; generated labels require independent validation. Not installed, vendored or shipped.",
+      "license": "Apache-2.0",
+      "accessed": "2026-10-14",
+      "evidence": "Primary upstream README, release/license materials and linked paper reviewed on 2026-10-14.",
+      "confidence": "high",
+      "notes": "Portfolio performance and native Windows installation are unmeasured; pin and audit before adoption."
     }
   ]
 }

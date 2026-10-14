@@ -20,6 +20,11 @@ The [outcome lifecycle](docs/outcome-lifecycle.md) carries frozen versions and
 failures across hosts; [enterprise profiles](docs/enterprise-deployment.md)
 separate data, inference, telemetry and operator-access requirements.
 
+For work spanning sessions, use [long-running goals](docs/long-running-goals.md)
+to retain every request, owner, before/after change and independent review in
+the same append-only outcome ledger. The [portfolio request register](docs/portfolio-agent-campaign.md)
+shows the current split between visual work and in-app agent behavior.
+
 - current install paths for Windows, macOS, Linux, and WSL;
 - one canonical project contract and one canonical `.agents/skills` tree;
 - native MCP, hook, and subagent examples for all three hosts;
